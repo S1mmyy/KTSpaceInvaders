@@ -54,9 +54,32 @@ namespace SpaceInvaders
 		private System.Windows.Forms.MenuItem menuItem1;
 		private System.Windows.Forms.MenuItem menuItem2;
 		private System.Windows.Forms.MenuItem menuItem3;
-        private MenuItem menuItem4;
-        private MenuItem menuItem5;
+        private Button menuBtn;
+        private Panel menuPnl;
+        private Button enemyBombMidbtn;
+        private Button enemyBombSlowbtn;
+        private Button enemyBombFastbtn;
+        private Button playerSpeedMidbtn;
+        private Button playerSpeedSlowbtn;
+        private Button playerSpeedFastbtn;
+        private Label playerInputlbl;
+        private Label enemyBombSpeedlbl;
+        private Label playerMovementSpeedlbl;
+        private Button exitBtn;
         private Thread oThread = null;
+        private Button controlArrowsbtn;
+        private Button controlKeysbtn;
+        private Button saveUserbtn;
+        private TextBox usertxtbox;
+        private Label makeUserlbl;
+        private Button SignInbtn;
+        private TextBox SignIntxtBox;
+        private Label signInlbl;
+        private Button button1;
+        private Button button2;
+        private Button button3;
+        private Label PlayerBulletSpeedlbl;
+        private Man player = new Man();
 
 		[DllImport("winmm.dll")]
 		public static extern long PlaySound(String lpszName, long hModule, long dwFlags);
@@ -100,8 +123,7 @@ namespace SpaceInvaders
 			TheScore.GameOver = false;
 			GameGoing = true;
 			TheSpeed = 6;
-            menuItem5.Text = "Lives = " + NumberOfMen;
-        }
+		}
 
 		private void InitializeSaucer()
 		{
@@ -203,8 +225,31 @@ namespace SpaceInvaders
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
-            this.menuItem4 = new System.Windows.Forms.MenuItem();
-            this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.menuBtn = new System.Windows.Forms.Button();
+            this.menuPnl = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.PlayerBulletSpeedlbl = new System.Windows.Forms.Label();
+            this.SignInbtn = new System.Windows.Forms.Button();
+            this.SignIntxtBox = new System.Windows.Forms.TextBox();
+            this.signInlbl = new System.Windows.Forms.Label();
+            this.saveUserbtn = new System.Windows.Forms.Button();
+            this.usertxtbox = new System.Windows.Forms.TextBox();
+            this.makeUserlbl = new System.Windows.Forms.Label();
+            this.controlArrowsbtn = new System.Windows.Forms.Button();
+            this.controlKeysbtn = new System.Windows.Forms.Button();
+            this.exitBtn = new System.Windows.Forms.Button();
+            this.enemyBombMidbtn = new System.Windows.Forms.Button();
+            this.enemyBombSlowbtn = new System.Windows.Forms.Button();
+            this.enemyBombFastbtn = new System.Windows.Forms.Button();
+            this.playerSpeedMidbtn = new System.Windows.Forms.Button();
+            this.playerSpeedSlowbtn = new System.Windows.Forms.Button();
+            this.playerSpeedFastbtn = new System.Windows.Forms.Button();
+            this.playerInputlbl = new System.Windows.Forms.Label();
+            this.enemyBombSpeedlbl = new System.Windows.Forms.Label();
+            this.playerMovementSpeedlbl = new System.Windows.Forms.Label();
+            this.menuPnl.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -215,56 +260,288 @@ namespace SpaceInvaders
             // mainMenu1
             // 
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1,
-            this.menuItem5});
+            this.menuItem1});
             // 
             // menuItem1
             // 
             this.menuItem1.Index = 0;
             this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem4,
             this.menuItem2,
             this.menuItem3});
             this.menuItem1.Text = "File";
             // 
             // menuItem2
             // 
-            this.menuItem2.Index = 1;
+            this.menuItem2.Index = 0;
             this.menuItem2.Text = "Restart...";
             this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
             // 
             // menuItem3
             // 
-            this.menuItem3.Index = 2;
+            this.menuItem3.Index = 1;
             this.menuItem3.Text = "Exit";
             this.menuItem3.Click += new System.EventHandler(this.Menu_Exit);
             // 
-            // menuItem4
+            // menuBtn
             // 
-            this.menuItem4.Index = 0;
-            this.menuItem4.Text = "Pause/Unpause";
-            this.menuItem4.Click += new System.EventHandler(this.MenuItem4_Click);
+            this.menuBtn.Location = new System.Drawing.Point(585, 12);
+            this.menuBtn.Name = "menuBtn";
+            this.menuBtn.Size = new System.Drawing.Size(75, 23);
+            this.menuBtn.TabIndex = 0;
+            this.menuBtn.Text = "Menu";
+            this.menuBtn.UseVisualStyleBackColor = true;
+            this.menuBtn.Click += new System.EventHandler(this.menuBtn_Click);
             // 
-            // menuItem5
+            // menuPnl
             // 
-            this.menuItem5.Index = 1;
-            this.menuItem5.Text = "Lives = ";
-            this.menuItem5.Click += new System.EventHandler(this.MenuItem5_Click);
+            this.menuPnl.Controls.Add(this.button1);
+            this.menuPnl.Controls.Add(this.button2);
+            this.menuPnl.Controls.Add(this.button3);
+            this.menuPnl.Controls.Add(this.PlayerBulletSpeedlbl);
+            this.menuPnl.Controls.Add(this.SignInbtn);
+            this.menuPnl.Controls.Add(this.SignIntxtBox);
+            this.menuPnl.Controls.Add(this.signInlbl);
+            this.menuPnl.Controls.Add(this.saveUserbtn);
+            this.menuPnl.Controls.Add(this.usertxtbox);
+            this.menuPnl.Controls.Add(this.makeUserlbl);
+            this.menuPnl.Controls.Add(this.controlArrowsbtn);
+            this.menuPnl.Controls.Add(this.controlKeysbtn);
+            this.menuPnl.Controls.Add(this.exitBtn);
+            this.menuPnl.Controls.Add(this.enemyBombMidbtn);
+            this.menuPnl.Controls.Add(this.enemyBombSlowbtn);
+            this.menuPnl.Controls.Add(this.enemyBombFastbtn);
+            this.menuPnl.Controls.Add(this.playerSpeedMidbtn);
+            this.menuPnl.Controls.Add(this.playerSpeedSlowbtn);
+            this.menuPnl.Controls.Add(this.playerSpeedFastbtn);
+            this.menuPnl.Controls.Add(this.playerInputlbl);
+            this.menuPnl.Controls.Add(this.enemyBombSpeedlbl);
+            this.menuPnl.Controls.Add(this.playerMovementSpeedlbl);
+            this.menuPnl.Location = new System.Drawing.Point(155, 121);
+            this.menuPnl.Name = "menuPnl";
+            this.menuPnl.Size = new System.Drawing.Size(412, 326);
+            this.menuPnl.TabIndex = 1;
+            this.menuPnl.Visible = false;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(126, 85);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 20;
+            this.button1.Text = "Medium";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(126, 114);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 19;
+            this.button2.Text = "Slow";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(126, 56);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 18;
+            this.button3.Text = "Fast";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // PlayerBulletSpeedlbl
+            // 
+            this.PlayerBulletSpeedlbl.AutoSize = true;
+            this.PlayerBulletSpeedlbl.Location = new System.Drawing.Point(123, 10);
+            this.PlayerBulletSpeedlbl.Name = "PlayerBulletSpeedlbl";
+            this.PlayerBulletSpeedlbl.Size = new System.Drawing.Size(67, 13);
+            this.PlayerBulletSpeedlbl.TabIndex = 17;
+            this.PlayerBulletSpeedlbl.Text = "Bullet Speed";
+            // 
+            // SignInbtn
+            // 
+            this.SignInbtn.Location = new System.Drawing.Point(126, 300);
+            this.SignInbtn.Name = "SignInbtn";
+            this.SignInbtn.Size = new System.Drawing.Size(94, 23);
+            this.SignInbtn.TabIndex = 16;
+            this.SignInbtn.Text = "Sign In";
+            this.SignInbtn.UseVisualStyleBackColor = true;
+            this.SignInbtn.Click += new System.EventHandler(this.SignInbtn_Click);
+            // 
+            // SignIntxtBox
+            // 
+            this.SignIntxtBox.Location = new System.Drawing.Point(126, 278);
+            this.SignIntxtBox.Name = "SignIntxtBox";
+            this.SignIntxtBox.Size = new System.Drawing.Size(94, 20);
+            this.SignIntxtBox.TabIndex = 15;
+            // 
+            // signInlbl
+            // 
+            this.signInlbl.AutoSize = true;
+            this.signInlbl.Location = new System.Drawing.Point(123, 262);
+            this.signInlbl.Name = "signInlbl";
+            this.signInlbl.Size = new System.Drawing.Size(43, 13);
+            this.signInlbl.TabIndex = 14;
+            this.signInlbl.Text = "Sign In:";
+            // 
+            // saveUserbtn
+            // 
+            this.saveUserbtn.Location = new System.Drawing.Point(3, 300);
+            this.saveUserbtn.Name = "saveUserbtn";
+            this.saveUserbtn.Size = new System.Drawing.Size(94, 23);
+            this.saveUserbtn.TabIndex = 13;
+            this.saveUserbtn.Text = "Save";
+            this.saveUserbtn.UseVisualStyleBackColor = true;
+            this.saveUserbtn.Click += new System.EventHandler(this.saveUserbtn_Click);
+            // 
+            // usertxtbox
+            // 
+            this.usertxtbox.Location = new System.Drawing.Point(3, 278);
+            this.usertxtbox.Name = "usertxtbox";
+            this.usertxtbox.Size = new System.Drawing.Size(94, 20);
+            this.usertxtbox.TabIndex = 12;
+            // 
+            // makeUserlbl
+            // 
+            this.makeUserlbl.AutoSize = true;
+            this.makeUserlbl.Location = new System.Drawing.Point(3, 262);
+            this.makeUserlbl.Name = "makeUserlbl";
+            this.makeUserlbl.Size = new System.Drawing.Size(85, 13);
+            this.makeUserlbl.TabIndex = 11;
+            this.makeUserlbl.Text = "Save New User:";
+            // 
+            // controlArrowsbtn
+            // 
+            this.controlArrowsbtn.Location = new System.Drawing.Point(15, 192);
+            this.controlArrowsbtn.Name = "controlArrowsbtn";
+            this.controlArrowsbtn.Size = new System.Drawing.Size(180, 23);
+            this.controlArrowsbtn.TabIndex = 10;
+            this.controlArrowsbtn.Text = "left arrow, right arrow, spacebar";
+            this.controlArrowsbtn.UseVisualStyleBackColor = true;
+            // 
+            // controlKeysbtn
+            // 
+            this.controlKeysbtn.Location = new System.Drawing.Point(15, 221);
+            this.controlKeysbtn.Name = "controlKeysbtn";
+            this.controlKeysbtn.Size = new System.Drawing.Size(180, 23);
+            this.controlKeysbtn.TabIndex = 9;
+            this.controlKeysbtn.Text = "\'a\', \'s\', \'w\'";
+            this.controlKeysbtn.UseVisualStyleBackColor = true;
+            // 
+            // exitBtn
+            // 
+            this.exitBtn.Location = new System.Drawing.Point(334, 10);
+            this.exitBtn.Name = "exitBtn";
+            this.exitBtn.Size = new System.Drawing.Size(75, 313);
+            this.exitBtn.TabIndex = 8;
+            this.exitBtn.Text = "Exit";
+            this.exitBtn.UseVisualStyleBackColor = true;
+            this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
+            // 
+            // enemyBombMidbtn
+            // 
+            this.enemyBombMidbtn.Location = new System.Drawing.Point(228, 85);
+            this.enemyBombMidbtn.Name = "enemyBombMidbtn";
+            this.enemyBombMidbtn.Size = new System.Drawing.Size(75, 23);
+            this.enemyBombMidbtn.TabIndex = 7;
+            this.enemyBombMidbtn.Text = "Medium";
+            this.enemyBombMidbtn.UseVisualStyleBackColor = true;
+            // 
+            // enemyBombSlowbtn
+            // 
+            this.enemyBombSlowbtn.Location = new System.Drawing.Point(228, 114);
+            this.enemyBombSlowbtn.Name = "enemyBombSlowbtn";
+            this.enemyBombSlowbtn.Size = new System.Drawing.Size(75, 23);
+            this.enemyBombSlowbtn.TabIndex = 6;
+            this.enemyBombSlowbtn.Text = "Slow";
+            this.enemyBombSlowbtn.UseVisualStyleBackColor = true;
+            // 
+            // enemyBombFastbtn
+            // 
+            this.enemyBombFastbtn.Location = new System.Drawing.Point(228, 56);
+            this.enemyBombFastbtn.Name = "enemyBombFastbtn";
+            this.enemyBombFastbtn.Size = new System.Drawing.Size(75, 23);
+            this.enemyBombFastbtn.TabIndex = 5;
+            this.enemyBombFastbtn.Text = "Fast";
+            this.enemyBombFastbtn.UseVisualStyleBackColor = true;
+            // 
+            // playerSpeedMidbtn
+            // 
+            this.playerSpeedMidbtn.Location = new System.Drawing.Point(15, 85);
+            this.playerSpeedMidbtn.Name = "playerSpeedMidbtn";
+            this.playerSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
+            this.playerSpeedMidbtn.TabIndex = 4;
+            this.playerSpeedMidbtn.Text = "Medium";
+            this.playerSpeedMidbtn.UseVisualStyleBackColor = true;
+            this.playerSpeedMidbtn.Click += new System.EventHandler(this.playerSpeedMidbtn_Click);
+            // 
+            // playerSpeedSlowbtn
+            // 
+            this.playerSpeedSlowbtn.Location = new System.Drawing.Point(15, 114);
+            this.playerSpeedSlowbtn.Name = "playerSpeedSlowbtn";
+            this.playerSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
+            this.playerSpeedSlowbtn.TabIndex = 3;
+            this.playerSpeedSlowbtn.Text = "Slow";
+            this.playerSpeedSlowbtn.UseVisualStyleBackColor = true;
+            this.playerSpeedSlowbtn.Click += new System.EventHandler(this.playerSpeedSlowbtn_Click);
+            // 
+            // playerSpeedFastbtn
+            // 
+            this.playerSpeedFastbtn.Location = new System.Drawing.Point(15, 56);
+            this.playerSpeedFastbtn.Name = "playerSpeedFastbtn";
+            this.playerSpeedFastbtn.Size = new System.Drawing.Size(75, 23);
+            this.playerSpeedFastbtn.TabIndex = 2;
+            this.playerSpeedFastbtn.Text = "Fast";
+            this.playerSpeedFastbtn.UseVisualStyleBackColor = true;
+            this.playerSpeedFastbtn.Click += new System.EventHandler(this.playerSpeedFastbtn_Click);
+            // 
+            // playerInputlbl
+            // 
+            this.playerInputlbl.AutoSize = true;
+            this.playerInputlbl.Location = new System.Drawing.Point(12, 153);
+            this.playerInputlbl.Name = "playerInputlbl";
+            this.playerInputlbl.Size = new System.Drawing.Size(119, 13);
+            this.playerInputlbl.TabIndex = 2;
+            this.playerInputlbl.Text = "Change the player input";
+            // 
+            // enemyBombSpeedlbl
+            // 
+            this.enemyBombSpeedlbl.AutoSize = true;
+            this.enemyBombSpeedlbl.Location = new System.Drawing.Point(225, 10);
+            this.enemyBombSpeedlbl.Name = "enemyBombSpeedlbl";
+            this.enemyBombSpeedlbl.Size = new System.Drawing.Size(103, 13);
+            this.enemyBombSpeedlbl.TabIndex = 1;
+            this.enemyBombSpeedlbl.Text = "Enemy Bomb Speed";
+            // 
+            // playerMovementSpeedlbl
+            // 
+            this.playerMovementSpeedlbl.AutoSize = true;
+            this.playerMovementSpeedlbl.Location = new System.Drawing.Point(3, 10);
+            this.playerMovementSpeedlbl.Name = "playerMovementSpeedlbl";
+            this.playerMovementSpeedlbl.Size = new System.Drawing.Size(91, 13);
+            this.playerMovementSpeedlbl.TabIndex = 0;
+            this.playerMovementSpeedlbl.Text = "Movement Speed";
             // 
             // Form1
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(672, 622);
+            this.Controls.Add(this.menuPnl);
+            this.Controls.Add(this.menuBtn);
             this.KeyPreview = true;
             this.Menu = this.mainMenu1;
             this.Name = "Form1";
             this.Text = "Space Invaders Game";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.menuPnl.ResumeLayout(false);
+            this.menuPnl.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -557,9 +834,8 @@ namespace SpaceInvaders
 		{
 			if (TheMan.Died)
 			{
-                NumberOfMen --;
-                menuItem5.Text = "Lives = " + NumberOfMen;
-                if (NumberOfMen == 0)
+			  NumberOfMen --;
+				if (NumberOfMen == 0)
 				{
 					TheHighScore.Write(TheScore.Count);
 					TheScore.GameOver = true;
@@ -601,7 +877,7 @@ namespace SpaceInvaders
 					if (TheInvaders.Invaders[j].IsBombColliding(TheMan.GetBounds()) )
 					{
 					  TheMan.BeenHit = true;
-                        PlaySoundInThread("2.wav", 1);
+					  PlaySoundInThread("2.wav", 1);
 					}
 				}
 			}
@@ -725,27 +1001,55 @@ namespace SpaceInvaders
 			Application.Exit();
 		}
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void menuBtn_Click(object sender, EventArgs e)
+        {
+            menuPnl.Visible = true;
+        }
+
+        private void playerSpeedFastbtn_Click(object sender, EventArgs e)
+        {
+            TheMan.setInterval(15);
+        }
+
+        private void playerSpeedMidbtn_Click(object sender, EventArgs e)
+        {
+            TheMan.setInterval(10);
+        }
+
+        private void playerSpeedSlowbtn_Click(object sender, EventArgs e)
+        {
+            TheMan.setInterval(5);
+        }
+
+        private void exitBtn_Click(object sender, EventArgs e)
+        {
+            menuPnl.Visible = false;
+        }
+
+        private void saveUserbtn_Click(object sender, EventArgs e)
+        {
+
+            usertxtbox.Text = "";
+        }
+
+        private void SignInbtn_Click(object sender, EventArgs e)
         {
 
         }
 
-        //pause and unpause
-        private void MenuItem4_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            if(GameGoing == false && kNumberOfTries > 0)
-            {
-                GameGoing = true;
-            }
-            else if(GameGoing == true && kNumberOfTries > 0)
-            {
-                GameGoing = false;
-            }
+
         }
 
-        private void MenuItem5_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
