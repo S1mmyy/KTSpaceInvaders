@@ -13,6 +13,10 @@ namespace SpaceInvaders
 		private int kInterval = 5;
 		public bool Died = false;
 
+        public void setInterval(int x)
+        {
+            kInterval = x;
+        }
 		public Man(): base("man.gif")
 		{
 			Position.X = 200;

@@ -54,8 +54,8 @@ namespace SpaceInvaders
 		private System.Windows.Forms.MenuItem menuItem1;
 		private System.Windows.Forms.MenuItem menuItem2;
 		private System.Windows.Forms.MenuItem menuItem3;
-
-		private Thread oThread = null;
+        private Button menuBtn;
+        private Thread oThread = null;
 
 		[DllImport("winmm.dll")]
 		public static extern long PlaySound(String lpszName, long hModule, long dwFlags);
@@ -194,57 +194,71 @@ namespace SpaceInvaders
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Form1));
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			// 
-			// timer1
-			// 
-			this.timer1.Interval = 50;
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-			// 
-			// mainMenu1
-			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem1});
-			// 
-			// menuItem1
-			// 
-			this.menuItem1.Index = 0;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem2,
-																					  this.menuItem3});
-			this.menuItem1.Text = "File";
-			// 
-			// menuItem2
-			// 
-			this.menuItem2.Index = 0;
-			this.menuItem2.Text = "Restart...";
-			this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
-			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 1;
-			this.menuItem3.Text = "Exit";
-			this.menuItem3.Click += new System.EventHandler(this.Menu_Exit);
-			// 
-			// Form1
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.BackgroundImage = ((System.Drawing.Bitmap)(resources.GetObject("$this.BackgroundImage")));
-			this.ClientSize = new System.Drawing.Size(672, 622);
-			this.KeyPreview = true;
-			this.Menu = this.mainMenu1;
-			this.Name = "Form1";
-			this.Text = "Space Invaders Game";
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
-			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.menuBtn = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 50;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // mainMenu1
+            // 
+            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem1});
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 0;
+            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem2,
+            this.menuItem3});
+            this.menuItem1.Text = "File";
+            // 
+            // menuItem2
+            // 
+            this.menuItem2.Index = 0;
+            this.menuItem2.Text = "Restart...";
+            this.menuItem2.Click += new System.EventHandler(this.menuItem2_Click);
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 1;
+            this.menuItem3.Text = "Exit";
+            this.menuItem3.Click += new System.EventHandler(this.Menu_Exit);
+            // 
+            // menuBtn
+            // 
+            this.menuBtn.Location = new System.Drawing.Point(585, 12);
+            this.menuBtn.Name = "menuBtn";
+            this.menuBtn.Size = new System.Drawing.Size(75, 23);
+            this.menuBtn.TabIndex = 0;
+            this.menuBtn.Text = "Menu";
+            this.menuBtn.UseVisualStyleBackColor = true;
+            this.menuBtn.Click += new System.EventHandler(this.menuBtn_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.ClientSize = new System.Drawing.Size(672, 622);
+            this.Controls.Add(this.menuBtn);
+            this.KeyPreview = true;
+            this.Menu = this.mainMenu1;
+            this.Name = "Form1";
+            this.Text = "Space Invaders Game";
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -702,5 +716,10 @@ namespace SpaceInvaders
 		{
 			Application.Exit();
 		}
-	}
+
+        private void menuBtn_Click(object sender, EventArgs e)
+        {
+            
+        }
+    }
 }
