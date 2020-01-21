@@ -33,20 +33,11 @@ namespace SpaceInvaders
 
 		public void Slow()
 		{
-            BulletInterval = 20;
+//		  BulletInterval = 3;
 		}
 
-        public void Medium()
-        {
-            BulletInterval = 30;
-        }
 
-        public void Fast()
-        {
-            BulletInterval = 40;
-        }
-
-        public override void Draw(Graphics g)
+		public override void Draw(Graphics g)
 		{
 			UpdateBounds();
 			g.FillRectangle(Brushes.Chartreuse , MovingBounds);
