@@ -54,8 +54,8 @@ namespace SpaceInvaders
 		private System.Windows.Forms.MenuItem menuItem1;
 		private System.Windows.Forms.MenuItem menuItem2;
 		private System.Windows.Forms.MenuItem menuItem3;
-        private Button menuBtn;
-        private Thread oThread = null;
+
+		private Thread oThread = null;
 
 		[DllImport("winmm.dll")]
 		public static extern long PlaySound(String lpszName, long hModule, long dwFlags);
@@ -201,7 +201,6 @@ namespace SpaceInvaders
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
-            this.menuBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // timer1
@@ -234,22 +233,11 @@ namespace SpaceInvaders
             this.menuItem3.Text = "Exit";
             this.menuItem3.Click += new System.EventHandler(this.Menu_Exit);
             // 
-            // menuBtn
-            // 
-            this.menuBtn.Location = new System.Drawing.Point(585, 12);
-            this.menuBtn.Name = "menuBtn";
-            this.menuBtn.Size = new System.Drawing.Size(75, 23);
-            this.menuBtn.TabIndex = 0;
-            this.menuBtn.Text = "Menu";
-            this.menuBtn.UseVisualStyleBackColor = true;
-            this.menuBtn.Click += new System.EventHandler(this.menuBtn_Click);
-            // 
             // Form1
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(672, 622);
-            this.Controls.Add(this.menuBtn);
             this.KeyPreview = true;
             this.Menu = this.mainMenu1;
             this.Name = "Form1";
@@ -297,7 +285,28 @@ namespace SpaceInvaders
 					if (timer1.Enabled == false)
 						timer1.Start();
 					break;
-				default:
+                case "W":
+                    if (ActiveBullet == false)
+                    {
+                        TheBullet.Position = TheMan.GetBulletStart();
+                        ActiveBullet = true;
+                        PlaySoundInThread("1.wav", 2);
+                    }
+                    CurrentKeyDown = LastKeyDown;
+                    break;
+                case "A":
+                    TheMan.MoveLeft();
+                    Invalidate(TheMan.GetBounds());
+                    if (timer1.Enabled == false)
+                        timer1.Start();
+                    break;
+                case "S":
+                    TheMan.MoveRight(ClientRectangle.Right);
+                    Invalidate(TheMan.GetBounds());
+                    if (timer1.Enabled == false)
+                        timer1.Start();
+                    break;
+                default:
 					break;
 			}
 
@@ -716,10 +725,5 @@ namespace SpaceInvaders
 		{
 			Application.Exit();
 		}
-
-        private void menuBtn_Click(object sender, EventArgs e)
-        {
-            
-        }
-    }
+	}
 }
