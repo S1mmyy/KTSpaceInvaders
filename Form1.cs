@@ -54,8 +54,22 @@ namespace SpaceInvaders
 		private System.Windows.Forms.MenuItem menuItem1;
 		private System.Windows.Forms.MenuItem menuItem2;
 		private System.Windows.Forms.MenuItem menuItem3;
-
-		private Thread oThread = null;
+        private Button menuBtn;
+        private Panel menuPnl;
+        private Button enemyBombMidbtn;
+        private Button enemyBombSlowbtn;
+        private Button enemyBombFastbtn;
+        private Button playerSpeedMidbtn;
+        private Button playerSpeedSlowbtn;
+        private Button playerSpeedFastbtn;
+        private Label playerInputlbl;
+        private Label enemyBombSpeedlbl;
+        private Label playerBulletSpeedlbl;
+        private Button exitBtn;
+        private Thread oThread = null;
+        private Button controlArrowsbtn;
+        private Button controlKeysbtn;
+        private Man player = new Man();
 
 		[DllImport("winmm.dll")]
 		public static extern long PlaySound(String lpszName, long hModule, long dwFlags);
@@ -201,6 +215,21 @@ namespace SpaceInvaders
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.menuBtn = new System.Windows.Forms.Button();
+            this.menuPnl = new System.Windows.Forms.Panel();
+            this.playerBulletSpeedlbl = new System.Windows.Forms.Label();
+            this.enemyBombSpeedlbl = new System.Windows.Forms.Label();
+            this.playerInputlbl = new System.Windows.Forms.Label();
+            this.playerSpeedFastbtn = new System.Windows.Forms.Button();
+            this.playerSpeedSlowbtn = new System.Windows.Forms.Button();
+            this.playerSpeedMidbtn = new System.Windows.Forms.Button();
+            this.enemyBombMidbtn = new System.Windows.Forms.Button();
+            this.enemyBombSlowbtn = new System.Windows.Forms.Button();
+            this.enemyBombFastbtn = new System.Windows.Forms.Button();
+            this.exitBtn = new System.Windows.Forms.Button();
+            this.controlArrowsbtn = new System.Windows.Forms.Button();
+            this.controlKeysbtn = new System.Windows.Forms.Button();
+            this.menuPnl.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -233,11 +262,155 @@ namespace SpaceInvaders
             this.menuItem3.Text = "Exit";
             this.menuItem3.Click += new System.EventHandler(this.Menu_Exit);
             // 
+            // menuBtn
+            // 
+            this.menuBtn.Location = new System.Drawing.Point(585, 12);
+            this.menuBtn.Name = "menuBtn";
+            this.menuBtn.Size = new System.Drawing.Size(75, 23);
+            this.menuBtn.TabIndex = 0;
+            this.menuBtn.Text = "Menu";
+            this.menuBtn.UseVisualStyleBackColor = true;
+            this.menuBtn.Click += new System.EventHandler(this.menuBtn_Click);
+            // 
+            // menuPnl
+            // 
+            this.menuPnl.Controls.Add(this.controlArrowsbtn);
+            this.menuPnl.Controls.Add(this.controlKeysbtn);
+            this.menuPnl.Controls.Add(this.exitBtn);
+            this.menuPnl.Controls.Add(this.enemyBombMidbtn);
+            this.menuPnl.Controls.Add(this.enemyBombSlowbtn);
+            this.menuPnl.Controls.Add(this.enemyBombFastbtn);
+            this.menuPnl.Controls.Add(this.playerSpeedMidbtn);
+            this.menuPnl.Controls.Add(this.playerSpeedSlowbtn);
+            this.menuPnl.Controls.Add(this.playerSpeedFastbtn);
+            this.menuPnl.Controls.Add(this.playerInputlbl);
+            this.menuPnl.Controls.Add(this.enemyBombSpeedlbl);
+            this.menuPnl.Controls.Add(this.playerBulletSpeedlbl);
+            this.menuPnl.Location = new System.Drawing.Point(155, 121);
+            this.menuPnl.Name = "menuPnl";
+            this.menuPnl.Size = new System.Drawing.Size(314, 257);
+            this.menuPnl.TabIndex = 1;
+            this.menuPnl.Visible = false;
+            // 
+            // playerBulletSpeedlbl
+            // 
+            this.playerBulletSpeedlbl.AutoSize = true;
+            this.playerBulletSpeedlbl.Location = new System.Drawing.Point(12, 13);
+            this.playerBulletSpeedlbl.Name = "playerBulletSpeedlbl";
+            this.playerBulletSpeedlbl.Size = new System.Drawing.Size(99, 13);
+            this.playerBulletSpeedlbl.TabIndex = 0;
+            this.playerBulletSpeedlbl.Text = "Player Bullet Speed";
+            // 
+            // enemyBombSpeedlbl
+            // 
+            this.enemyBombSpeedlbl.AutoSize = true;
+            this.enemyBombSpeedlbl.Location = new System.Drawing.Point(117, 13);
+            this.enemyBombSpeedlbl.Name = "enemyBombSpeedlbl";
+            this.enemyBombSpeedlbl.Size = new System.Drawing.Size(103, 13);
+            this.enemyBombSpeedlbl.TabIndex = 1;
+            this.enemyBombSpeedlbl.Text = "Enemy Bomb Speed";
+            // 
+            // playerInputlbl
+            // 
+            this.playerInputlbl.AutoSize = true;
+            this.playerInputlbl.Location = new System.Drawing.Point(12, 153);
+            this.playerInputlbl.Name = "playerInputlbl";
+            this.playerInputlbl.Size = new System.Drawing.Size(119, 13);
+            this.playerInputlbl.TabIndex = 2;
+            this.playerInputlbl.Text = "Change the player input";
+            // 
+            // playerSpeedFastbtn
+            // 
+            this.playerSpeedFastbtn.Location = new System.Drawing.Point(15, 56);
+            this.playerSpeedFastbtn.Name = "playerSpeedFastbtn";
+            this.playerSpeedFastbtn.Size = new System.Drawing.Size(75, 23);
+            this.playerSpeedFastbtn.TabIndex = 2;
+            this.playerSpeedFastbtn.Text = "Fast";
+            this.playerSpeedFastbtn.UseVisualStyleBackColor = true;
+            this.playerSpeedFastbtn.Click += new System.EventHandler(this.playerSpeedFastbtn_Click);
+            // 
+            // playerSpeedSlowbtn
+            // 
+            this.playerSpeedSlowbtn.Location = new System.Drawing.Point(15, 114);
+            this.playerSpeedSlowbtn.Name = "playerSpeedSlowbtn";
+            this.playerSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
+            this.playerSpeedSlowbtn.TabIndex = 3;
+            this.playerSpeedSlowbtn.Text = "Slow";
+            this.playerSpeedSlowbtn.UseVisualStyleBackColor = true;
+            this.playerSpeedSlowbtn.Click += new System.EventHandler(this.playerSpeedSlowbtn_Click);
+            // 
+            // playerSpeedMidbtn
+            // 
+            this.playerSpeedMidbtn.Location = new System.Drawing.Point(15, 85);
+            this.playerSpeedMidbtn.Name = "playerSpeedMidbtn";
+            this.playerSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
+            this.playerSpeedMidbtn.TabIndex = 4;
+            this.playerSpeedMidbtn.Text = "Medium";
+            this.playerSpeedMidbtn.UseVisualStyleBackColor = true;
+            this.playerSpeedMidbtn.Click += new System.EventHandler(this.playerSpeedMidbtn_Click);
+            // 
+            // enemyBombMidbtn
+            // 
+            this.enemyBombMidbtn.Location = new System.Drawing.Point(120, 85);
+            this.enemyBombMidbtn.Name = "enemyBombMidbtn";
+            this.enemyBombMidbtn.Size = new System.Drawing.Size(75, 23);
+            this.enemyBombMidbtn.TabIndex = 7;
+            this.enemyBombMidbtn.Text = "Medium";
+            this.enemyBombMidbtn.UseVisualStyleBackColor = true;
+            // 
+            // enemyBombSlowbtn
+            // 
+            this.enemyBombSlowbtn.Location = new System.Drawing.Point(120, 114);
+            this.enemyBombSlowbtn.Name = "enemyBombSlowbtn";
+            this.enemyBombSlowbtn.Size = new System.Drawing.Size(75, 23);
+            this.enemyBombSlowbtn.TabIndex = 6;
+            this.enemyBombSlowbtn.Text = "Slow";
+            this.enemyBombSlowbtn.UseVisualStyleBackColor = true;
+            // 
+            // enemyBombFastbtn
+            // 
+            this.enemyBombFastbtn.Location = new System.Drawing.Point(120, 56);
+            this.enemyBombFastbtn.Name = "enemyBombFastbtn";
+            this.enemyBombFastbtn.Size = new System.Drawing.Size(75, 23);
+            this.enemyBombFastbtn.TabIndex = 5;
+            this.enemyBombFastbtn.Text = "Fast";
+            this.enemyBombFastbtn.UseVisualStyleBackColor = true;
+            // 
+            // exitBtn
+            // 
+            this.exitBtn.Location = new System.Drawing.Point(226, 13);
+            this.exitBtn.Name = "exitBtn";
+            this.exitBtn.Size = new System.Drawing.Size(75, 231);
+            this.exitBtn.TabIndex = 8;
+            this.exitBtn.Text = "Exit";
+            this.exitBtn.UseVisualStyleBackColor = true;
+            this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
+            // 
+            // controlArrowsbtn
+            // 
+            this.controlArrowsbtn.Location = new System.Drawing.Point(15, 192);
+            this.controlArrowsbtn.Name = "controlArrowsbtn";
+            this.controlArrowsbtn.Size = new System.Drawing.Size(180, 23);
+            this.controlArrowsbtn.TabIndex = 10;
+            this.controlArrowsbtn.Text = "left arrow, right arrow, spacebar";
+            this.controlArrowsbtn.UseVisualStyleBackColor = true;
+            // 
+            // controlKeysbtn
+            // 
+            this.controlKeysbtn.Location = new System.Drawing.Point(15, 221);
+            this.controlKeysbtn.Name = "controlKeysbtn";
+            this.controlKeysbtn.Size = new System.Drawing.Size(180, 23);
+            this.controlKeysbtn.TabIndex = 9;
+            this.controlKeysbtn.Text = "\'a\', \'s\', \'w\'";
+            this.controlKeysbtn.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(672, 622);
+            this.Controls.Add(this.menuPnl);
+            this.Controls.Add(this.menuBtn);
             this.KeyPreview = true;
             this.Menu = this.mainMenu1;
             this.Name = "Form1";
@@ -246,6 +419,8 @@ namespace SpaceInvaders
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.menuPnl.ResumeLayout(false);
+            this.menuPnl.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -285,28 +460,7 @@ namespace SpaceInvaders
 					if (timer1.Enabled == false)
 						timer1.Start();
 					break;
-                case "W":
-                    if (ActiveBullet == false)
-                    {
-                        TheBullet.Position = TheMan.GetBulletStart();
-                        ActiveBullet = true;
-                        PlaySoundInThread("1.wav", 2);
-                    }
-                    CurrentKeyDown = LastKeyDown;
-                    break;
-                case "A":
-                    TheMan.MoveLeft();
-                    Invalidate(TheMan.GetBounds());
-                    if (timer1.Enabled == false)
-                        timer1.Start();
-                    break;
-                case "S":
-                    TheMan.MoveRight(ClientRectangle.Right);
-                    Invalidate(TheMan.GetBounds());
-                    if (timer1.Enabled == false)
-                        timer1.Start();
-                    break;
-                default:
+				default:
 					break;
 			}
 
@@ -725,5 +879,30 @@ namespace SpaceInvaders
 		{
 			Application.Exit();
 		}
-	}
+
+        private void menuBtn_Click(object sender, EventArgs e)
+        {
+            menuPnl.Visible = true;
+        }
+
+        private void playerSpeedFastbtn_Click(object sender, EventArgs e)
+        {
+            player.setInterval(100);
+        }
+
+        private void playerSpeedMidbtn_Click(object sender, EventArgs e)
+        {
+            player.setInterval(50);
+        }
+
+        private void playerSpeedSlowbtn_Click(object sender, EventArgs e)
+        {
+            player.setInterval(5);
+        }
+
+        private void exitBtn_Click(object sender, EventArgs e)
+        {
+            menuPnl.Visible = false;
+        }
+    }
 }
