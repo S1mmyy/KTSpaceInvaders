@@ -29,9 +29,9 @@ namespace SpaceInvaders
 
 		public void ResetBomb(int yPos)
 		{
-		  Position.Y = yPos;
-		  TheBombInterval = kBombInterval;
-		  UpdateBounds();
+		    Position.Y = yPos;
+		    TheBombInterval = kBombInterval;
+		    UpdateBounds();
 		}
 
 

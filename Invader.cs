@@ -85,9 +85,13 @@ namespace SpaceInvaders
 
 		public void SlowBomb()
 		{
-//		  TheBomb.TheBombInterval = 2;
+		    TheBomb.TheBombInterval = 5;
 		}
 
+        public void FastBomb()
+        {
+            TheBomb.TheBombInterval = 15;
+        }
 
 		public void ResetBombPosition()
 		{
