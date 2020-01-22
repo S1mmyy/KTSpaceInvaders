@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SpaceInvaders
 {
-    public class Players
+    class Players
     {
 
     }

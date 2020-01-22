@@ -17,12 +17,11 @@ namespace SpaceInvaders
 		{
 			Position.X = 200;
 			Position.Y = 400;
-
 		}
 
 		public Point GetBulletStart()
 		{
-		  Point theStart = new Point(
+		    Point theStart = new Point(
 			  MovingBounds.Left + MovingBounds.Width/2,
 			  MovingBounds.Top - 10);
 
@@ -49,9 +48,12 @@ namespace SpaceInvaders
 
 		public bool BeenHit = false;
 
+        public void setInterval(int x)
+        {
+            kInterval = x;
+        }
 
-
-		public void MoveLeft()
+        public void MoveLeft()
 		{
 			Position.X -= kInterval;
 			if (Position.X < 0)
