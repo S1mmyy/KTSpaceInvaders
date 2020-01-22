@@ -12,7 +12,6 @@ namespace SpaceInvaders
 		public Point LastPosition = new Point(0, 0);
 		public const int kBombIntervalSpacing = 50;
 
-
 		public InvaderRow(string gif1, string gif2, int rowNum)
 		{
 			//
@@ -20,10 +19,10 @@ namespace SpaceInvaders
 			//
 			for (int i = 0; i < Invaders.Length; i++)
 			{
-			  Invaders[i] = new Invader(gif1, gif2);
-			  Invaders[i].Position.X = i * Invaders[i].GetBounds().Width + 5;
-			  Invaders[i].Position.Y = rowNum * Invaders[i].GetBounds().Height + 10;
-			  Invaders[i].SetCounter(i*kBombIntervalSpacing);
+			    Invaders[i] = new Invader(gif1, gif2);
+			    Invaders[i].Position.X = i * Invaders[i].GetBounds().Width + 5;
+			    Invaders[i].Position.Y = rowNum * Invaders[i].GetBounds().Height + 10;
+			    Invaders[i].SetCounter(i*kBombIntervalSpacing);
 			}
 
 			LastPosition = Invaders[Invaders.Length - 1].Position;
@@ -42,10 +41,9 @@ namespace SpaceInvaders
 		{
 			get 
 			{
-			  return Invaders[index];
+			    return Invaders[index];
 			}
 		}
-
 
 		public void Draw(Graphics g)
 		{
@@ -88,7 +86,6 @@ namespace SpaceInvaders
 				LastPosition = Invaders[Invaders.Length - 1].Position;
 			else
 				LastPosition = Invaders[0].Position;
-
 		}
 
 		public void MoveInPlace()
@@ -97,18 +94,16 @@ namespace SpaceInvaders
 			{
 				Invaders[i].MoveInPlace();
 			}
-
 		}
-
-
+        
 		public Invader GetFirstInvader()
 		{
 			int count = 0;
 			Invader TheInvader  = Invaders[count];
 			while ((TheInvader.BeenHit == true) && (count < Invaders.Length-1))
 			{
-			  count++;
-			  TheInvader = Invaders[count];
+			    count++;
+			    TheInvader = Invaders[count];
 			}
 
 			return TheInvader;
@@ -132,8 +127,8 @@ namespace SpaceInvaders
 			int count = 0;
 			for (int i = 0; i < Invaders.Length; i++)
 			{
-				 if (Invaders[i].Died == false)
-					 count++;
+			    if (Invaders[i].Died == false)
+			        count++;
 			}
 
 			return count;
@@ -143,13 +138,11 @@ namespace SpaceInvaders
 		{
 			for (int i = 0; i < Invaders.Length; i++)
 			{
-			  if ( (Invaders[i].GetBounds().Bottom >= bottom) &&
-				   (Invaders[i].BeenHit = false))
-				  return true;
+			    if ( (Invaders[i].GetBounds().Bottom >= bottom) && (Invaders[i].BeenHit = false))
+				    return true;
 			}
 
 			return false;
-		
 		}
 
 		public void MoveDown()
@@ -160,7 +153,5 @@ namespace SpaceInvaders
 				Invaders[i].UpdateBounds();
 			}
 		}
-
-
 	}
 }

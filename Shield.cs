@@ -28,8 +28,8 @@ namespace SpaceInvaders
 
 		public void AddBulletHole(Rectangle r, bool dir)
 		{
-		  Rectangle rup = r;
-		  rup.Inflate(r.Width/4, -r.Height/4);
+		    Rectangle rup = r;
+		    rup.Inflate(r.Width/4, -r.Height/4);
 
 			if (dir == true)
 			{
@@ -37,18 +37,18 @@ namespace SpaceInvaders
 			}
 			else
 			{
-	//			rup.Offset(0, r.Height/2);
+				//rup.Offset(0, r.Height/2);
 				rup.Height += 20;
 
 				// make sure the whole top part of the shield is clear
 				if ((rup.Y - Position.Y) <= 20)
 				{
-				  rup.Y = Position.Y;
-				  rup.Height += 5;
+				    rup.Y = Position.Y;
+				    rup.Height += 5;
 				}
 			}
 
-		  BulletHoles.Add(rup);
+		    BulletHoles.Add(rup);
 		}
 
 		private bool CheckBulletHoleIntersection(Rectangle rTest, bool dirDown)
@@ -82,13 +82,11 @@ namespace SpaceInvaders
 
 			if (r.IntersectsWith(MovingBounds))
 			{
-			  AddBulletHole(r, directionDown);
-			  return true;
+			    AddBulletHole(r, directionDown);
+			    return true;
 			}
 
 			return false;
 		}
-
-
 	}
 }

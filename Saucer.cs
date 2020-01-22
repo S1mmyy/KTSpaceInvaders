@@ -12,7 +12,6 @@ namespace SpaceInvaders
 		private Image OtherImage1 = null;
 		private Image OtherImage2 = null;
 
-
 		public bool BeenHit = false;
 
 		public int CountExplosion = 0;
@@ -21,7 +20,6 @@ namespace SpaceInvaders
 
 		private int rseed = (int)DateTime.Now.Ticks;
 		private Random RandomNumber = null;
-
 
 		public bool DirectionRight = true;
 
@@ -72,7 +70,6 @@ namespace SpaceInvaders
 				g.DrawImage(OtherImage2, MovingBounds, 0, 0, ImageBounds.Width, ImageBounds.Height, GraphicsUnit.Pixel);
 		}
 
-
 		public void SetCounter(long lCount)
 		{
 			Counter = lCount;
@@ -80,7 +77,6 @@ namespace SpaceInvaders
 
 		public void DrawExplosion(Graphics g)
 		{
-
 			if (Died)
 				return;
 
@@ -129,7 +125,5 @@ namespace SpaceInvaders
 
 			g.DrawString(ScoreValue.ToString(), new Font("Ariel", 14, FontStyle.Bold), Brushes.White, MovingBounds, new StringFormat());
 		}
-
-
 	}
 }

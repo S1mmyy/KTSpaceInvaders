@@ -26,7 +26,6 @@ namespace SpaceInvaders
 		private int rseed = (int)DateTime.Now.Ticks;
 		private Random RandomNumber = null;
 
-
 		public bool DirectionRight = true;
 
 		private const int kInterval = 10;
@@ -63,7 +62,7 @@ namespace SpaceInvaders
 
 			if (ActiveBomb)
 			{
-			  TheBomb.Draw(g);
+			    TheBomb.Draw(g);
 				if (Form1.ActiveForm != null)
 				{
 					if (TheBomb.Position.Y > Form1.ActiveForm.ClientRectangle.Height)
@@ -72,15 +71,13 @@ namespace SpaceInvaders
 					}
 				}
 			}
-
-
+            
 			if ((ActiveBomb == false) && (Counter % kBombInterval == 0))
 			{
 				ActiveBomb = true;
 				TheBomb.Position.X = MovingBounds.X + MovingBounds.Width/2;
 				TheBomb.Position.Y = MovingBounds.Y + 5;
 			}
-
 		}
 
 		public void SlowBomb()
@@ -106,7 +103,6 @@ namespace SpaceInvaders
 
 		public void DrawExplosion(Graphics g)
 		{
-
 			if (Died)
 				return;
 
@@ -152,18 +148,17 @@ namespace SpaceInvaders
 
 		public Rectangle GetBombBounds()
 		{
-		  return TheBomb.GetBounds();
+		    return TheBomb.GetBounds();
 		}
 
 		public bool IsBombColliding(Rectangle r)
 		{
 			if (ActiveBomb && TheBomb.GetBounds().IntersectsWith(r))
 			{
-			  return true;
+			    return true;
 			}
 
 			return false;
 		}
-
 	}
 }

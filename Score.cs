@@ -22,7 +22,6 @@ namespace SpaceInvaders
 			Position.Y = y;
 		}
 
-
 		public bool GameOver = false;
 
 		public virtual void Draw(Graphics g)
@@ -31,7 +30,6 @@ namespace SpaceInvaders
 				g.DrawString("Score: " + Count.ToString(), MyFont, Brushes.RoyalBlue, Position.X, Position.Y, new StringFormat());
 			else
 				g.DrawString("Game Over - Final Score: " + Count.ToString(), MyFont, Brushes.RoyalBlue, Position.X, Position.Y, new StringFormat());
-
 		}
 
 		public Rectangle GetFrame()
@@ -39,9 +37,6 @@ namespace SpaceInvaders
 			Rectangle myRect = new Rectangle(Position.X, Position.Y, (int)MyFont.SizeInPoints*Count.ToString().Length, MyFont.Height);
 			return myRect;
 		}
-
-
-
 
 		/// <summary>
 		/// Resets the score to 0

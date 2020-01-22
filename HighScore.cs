@@ -18,7 +18,7 @@ namespace SpaceInvaders
 
 		public override void Draw(Graphics g)
 		{
-				g.DrawString("High Score: " + Count.ToString(), MyFont, Brushes.RoyalBlue, Position.X, Position.Y, new StringFormat());
+		    g.DrawString("High Score: " + Count.ToString(), MyFont, Brushes.RoyalBlue, Position.X, Position.Y, new StringFormat());
 		}
 
 		public void Write(int theScore)
@@ -33,17 +33,15 @@ namespace SpaceInvaders
 			}
 		}
 
-
 		public void Read()
 		{
-		  if (File.Exists("highscore.txt"))
-		  {
-			StreamReader sr = new StreamReader("highscore.txt");
-			string score = sr.ReadLine();
-			Count = Convert.ToInt32(score);
-			sr.Close();
-		  }
+		    if (File.Exists("highscore.txt"))
+		    {
+			    StreamReader sr = new StreamReader("highscore.txt");
+			    string score = sr.ReadLine();
+			    Count = Convert.ToInt32(score);
+			    sr.Close();
+		    }
 		}
-
 	}
 }

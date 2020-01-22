@@ -9,7 +9,6 @@ namespace SpaceInvaders
 	/// </summary>
 	public class Man : GameObject
 	{
-
 		private int kInterval = 5;
 		public bool Died = false;
 
@@ -91,7 +90,5 @@ namespace SpaceInvaders
 			Died = false;
 			CountExplosion = 0;
 		}
-
-
 	}
 }

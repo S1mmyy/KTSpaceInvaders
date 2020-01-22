@@ -19,7 +19,6 @@ namespace SpaceInvaders
 			Position.Y = y;
 		}
 
-
 		public override void Draw(Graphics g)
 		{
 			UpdateBounds();
@@ -33,7 +32,5 @@ namespace SpaceInvaders
 		    TheBombInterval = kBombInterval;
 		    UpdateBounds();
 		}
-
-
 	}
 }

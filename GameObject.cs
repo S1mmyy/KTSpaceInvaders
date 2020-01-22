@@ -14,12 +14,12 @@ namespace SpaceInvaders
         protected Rectangle ImageBounds = new Rectangle(0,0, 10, 10);
         protected Rectangle MovingBounds = new Rectangle();
 
-      public GameObject(string fileName)
-       {
-        TheImage = Image.FromFile(fileName);
-        ImageBounds.Width = TheImage.Width;
-        ImageBounds.Height = TheImage.Height;
-       }
+        public GameObject(string fileName)
+        {
+            TheImage = Image.FromFile(fileName);
+            ImageBounds.Width = TheImage.Width;
+            ImageBounds.Height = TheImage.Height;
+        }
 
 		public GameObject()
 		{
@@ -27,7 +27,7 @@ namespace SpaceInvaders
 		}
 
         
-        public  int Width
+        public int Width
         {
             get 
             {
@@ -35,21 +35,20 @@ namespace SpaceInvaders
             }
         }
 
-        public  int Height
-            {
-               get 
-                {
-                 return ImageBounds.Height;
-                }
-            }
-
-
-       public virtual int GetWidth()
+        public int Height
         {
-             return ImageBounds.Width;
+            get 
+            {
+                return ImageBounds.Height;
+            }
+        }
+
+        public virtual int GetWidth()
+        {
+            return ImageBounds.Width;
         }
         
-       public Image GetImage()
+        public Image GetImage()
         {
             return TheImage;
         }
@@ -65,13 +64,10 @@ namespace SpaceInvaders
             MovingBounds.Offset(Position);
         }
 
-    
         public virtual void Draw(Graphics g)
         {
             UpdateBounds();
             g.DrawImage(TheImage, MovingBounds, 0, 0, ImageBounds.Width, ImageBounds.Height, GraphicsUnit.Pixel);
         }
-
-
 	}
 }

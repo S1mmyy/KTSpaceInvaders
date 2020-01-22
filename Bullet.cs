@@ -31,27 +31,11 @@ namespace SpaceInvaders
 			BulletInterval = kBulletInterval;
 		}
 
-		public void Slow()
-		{
-		    BulletInterval = 3;
-		}
-
-        public void Medium()
-        {
-            BulletInterval = 20;
-        }
-
-        public void Fast()
-        {
-            BulletInterval = 40;
-        }
-
         public override void Draw(Graphics g)
 		{
 			UpdateBounds();
 			g.FillRectangle(Brushes.Chartreuse , MovingBounds);
 			Position.Y -= BulletInterval;
 		}
-
 	}
 }
