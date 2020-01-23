@@ -27,14 +27,12 @@ namespace SpaceInvaders
 				Position.Y = Form1.ActiveForm.ClientRectangle.Bottom;
 				MovingBounds.Y = Position.Y;
 			}
-
-			BulletInterval = kBulletInterval;
 		}
 
         public override void Draw(Graphics g)
 		{
 			UpdateBounds();
-			g.FillRectangle(Brushes.Chartreuse , MovingBounds);
+			g.FillRectangle(Brushes.Chartreuse, MovingBounds);
 			Position.Y -= BulletInterval;
 		}
 	}

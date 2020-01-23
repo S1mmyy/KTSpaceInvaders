@@ -9,7 +9,7 @@ namespace SpaceInvaders
 	/// </summary>
 	public class Man : GameObject
 	{
-		private int kInterval = 5;
+		public int Interval = 5;
 		public bool Died = false;
 
 		public Man(): base("man.gif")
@@ -47,21 +47,16 @@ namespace SpaceInvaders
 
 		public bool BeenHit = false;
 
-        public void setInterval(int x)
-        {
-            kInterval = x;
-        }
-
         public void MoveLeft()
 		{
-			Position.X -= kInterval;
+			Position.X -= Interval;
 			if (Position.X < 0)
 				Position.X = 0;
 		}
 
 		public void MoveRight(int nLimit)
 		{
-			Position.X += kInterval;
+			Position.X += Interval;
 			if (Position.X > nLimit - Width )
 				Position.X = nLimit - Width;
 		}
