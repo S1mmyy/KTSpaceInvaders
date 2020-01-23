@@ -10,9 +10,9 @@ namespace SpaceInvaders
 	public class Bullet : GameObject
 	{
 		const int kBulletInterval = 20;
-		public int BulletInterval = kBulletInterval;
-		
-		public Bullet(int x, int y)
+        public int BulletInterval = kBulletInterval;
+
+        public Bullet(int x, int y)
 		{
 			ImageBounds.Width = 5;
 			ImageBounds.Height = 15;
@@ -28,8 +28,23 @@ namespace SpaceInvaders
 				MovingBounds.Y = Position.Y;
 			}
 
-			BulletInterval = kBulletInterval;
+			//BulletInterval = kBulletInterval;
 		}
+
+        //public void Slow()
+        //{
+        //    BulletInterval = 20;
+        //}
+
+        //public void Medium()
+        //{
+        //    BulletInterval = 80;
+        //}
+
+        //public void Fast()
+        //{
+        //    BulletInterval = 320;
+        //}
 
         public override void Draw(Graphics g)
 		{
@@ -37,5 +52,6 @@ namespace SpaceInvaders
 			g.FillRectangle(Brushes.Chartreuse , MovingBounds);
 			Position.Y -= BulletInterval;
 		}
+
 	}
 }
