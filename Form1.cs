@@ -642,7 +642,7 @@ namespace SpaceInvaders
                         if (timer1.Enabled == false)
                             timer1.Start();
                         break;
-                    case "D":
+                    case "S":
                         TheMan.MoveRight(ClientRectangle.Right);
                         Invalidate(TheMan.GetBounds());
                         if (timer1.Enabled == false)
