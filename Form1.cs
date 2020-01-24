@@ -1006,8 +1006,11 @@ namespace SpaceInvaders
 
 				if (nTotalInvaders == 0)
 				{
-				    InitializeAllGameObjects(false); // don't initialize score					
-				    TheLevel++;
+					InitializeAllGameObjects(false); // don't initialize score					
+					if (++TheLevel % 5 == 0)
+					{
+						NumberOfMen++;
+					}
 				}
 			}
 
