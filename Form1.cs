@@ -155,6 +155,7 @@ namespace SpaceInvaders
 			TheMan = new Man();
 			TheMan.Position.Y = ClientRectangle.Bottom - 50;
 			NumberOfMen = 3;
+			TheMan.Interval = 5;
 		}
 
 		private void InitializeScore()
