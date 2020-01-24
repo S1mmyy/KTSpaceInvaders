@@ -155,7 +155,6 @@ namespace SpaceInvaders
 			TheMan = new Man();
 			TheMan.Position.Y = ClientRectangle.Bottom - 50;
 			NumberOfMen = 3;
-			TheMan.Interval = 5;
 		}
 
 		private void InitializeScore()
@@ -178,11 +177,11 @@ namespace SpaceInvaders
 
 		void InitializeInvaderRows(int level)
 		{
-            InvaderRows[0] = new InvaderRow("invader1.gif", "invader1c.gif", 2 + level);
-		    InvaderRows[1] = new InvaderRow("invader2.gif", "invader2c.gif", 3 + level);
-		    InvaderRows[2] = new InvaderRow("invader2.gif", "invader2c.gif", 4 + level);
-		    InvaderRows[3] = new InvaderRow("invader3.gif", "invader3c.gif", 5 + level);
-		    InvaderRows[4] = new InvaderRow("invader3.gif", "invader3c.gif", 6 + level);
+            InvaderRows[0] = new InvaderRow("invader1.gif", "invader1c.gif", 2 + level, level);
+		    InvaderRows[1] = new InvaderRow("invader2.gif", "invader2c.gif", 3 + level, level);
+		    InvaderRows[2] = new InvaderRow("invader2.gif", "invader2c.gif", 4 + level, level);
+		    InvaderRows[3] = new InvaderRow("invader3.gif", "invader3c.gif", 5 + level, level);
+		    InvaderRows[4] = new InvaderRow("invader3.gif", "invader3c.gif", 6 + level, level);
 		}
 
 		private string m_strCurrentSoundFile = "1.wav";
@@ -352,6 +351,7 @@ namespace SpaceInvaders
             this.menuPnl.Name = "menuPnl";
             this.menuPnl.Size = new System.Drawing.Size(412, 429);
             this.menuPnl.TabIndex = 1;
+            this.menuPnl.Paint += new System.Windows.Forms.PaintEventHandler(this.MenuPnl_Paint);
             // 
             // bulletSpeedMediumbtn
             // 
@@ -1158,6 +1158,11 @@ namespace SpaceInvaders
         private void controlKeysbtn_Click(object sender, EventArgs e)
         {
             useArrows = false;
+        }
+
+        private void MenuPnl_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

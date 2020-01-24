@@ -28,7 +28,7 @@ namespace SpaceInvaders
 
 		public bool DirectionRight = true;
 
-		private const int kInterval = 10;
+	    int kInterval = 10;
 		private long Counter = 0;
 
 		public Invader(string i1, string i2) : base(i1)
@@ -100,7 +100,11 @@ namespace SpaceInvaders
 		{
 			Counter = lCount;
 		}
-
+        
+        public void speed()
+        {
+            kInterval = kInterval + 10;
+        }
 		public void DrawExplosion(Graphics g)
 		{
 			if (Died)
