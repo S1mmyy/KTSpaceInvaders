@@ -9,7 +9,7 @@ namespace SpaceInvaders
 	/// </summary>
 	public class Man : GameObject
 	{
-		public int Interval = 5;
+		public int Interval { get; set; }
 		public bool Died = false;
 
 		public Man(): base("man.gif")
