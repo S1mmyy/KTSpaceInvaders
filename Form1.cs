@@ -242,9 +242,7 @@ namespace SpaceInvaders
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuBtn = new System.Windows.Forms.Button();
             this.menuPnl = new System.Windows.Forms.Panel();
-            this.bulletSpeedMidbtn = new System.Windows.Forms.Button();
-            this.bulletSpeedSlowbtn = new System.Windows.Forms.Button();
-            this.bulletSpeedFastbtn = new System.Windows.Forms.Button();
+            this.userMsglbl = new System.Windows.Forms.Label();
             this.signInbtn = new System.Windows.Forms.Button();
             this.signInTextBox = new System.Windows.Forms.TextBox();
             this.signInlbl = new System.Windows.Forms.Label();
@@ -255,6 +253,9 @@ namespace SpaceInvaders
             this.controlArrowsbtn = new System.Windows.Forms.Button();
             this.controlKeysbtn = new System.Windows.Forms.Button();
             this.exitBtn = new System.Windows.Forms.Button();
+            this.bulletSpeedMidbtn = new System.Windows.Forms.Button();
+            this.bulletSpeedSlowbtn = new System.Windows.Forms.Button();
+            this.bulletSpeedFastbtn = new System.Windows.Forms.Button();
             this.enemyBombSlowbtn = new System.Windows.Forms.Button();
             this.enemyBombFastbtn = new System.Windows.Forms.Button();
             this.playerSpeedMidbtn = new System.Windows.Forms.Button();
@@ -264,7 +265,6 @@ namespace SpaceInvaders
             this.enemyBombSpeedlbl = new System.Windows.Forms.Label();
             this.playerBulletSpeedlbl = new System.Windows.Forms.Label();
             this.playerMovementSpeedlbl = new System.Windows.Forms.Label();
-            this.userMsglbl = new System.Windows.Forms.Label();
             this.menuPnl.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -317,6 +317,7 @@ namespace SpaceInvaders
             this.menuBtn.Name = "menuBtn";
             this.menuBtn.Size = new System.Drawing.Size(75, 23);
             this.menuBtn.TabIndex = 0;
+            this.menuBtn.TabStop = false;
             this.menuBtn.Text = "Menu";
             this.menuBtn.UseVisualStyleBackColor = true;
             this.menuBtn.Visible = false;
@@ -352,36 +353,13 @@ namespace SpaceInvaders
             this.menuPnl.Size = new System.Drawing.Size(412, 429);
             this.menuPnl.TabIndex = 1;
             // 
-            // bulletSpeedMidbtn
+            // userMsglbl
             // 
-            this.bulletSpeedMidbtn.BackColor = System.Drawing.SystemColors.Highlight;
-            this.bulletSpeedMidbtn.Location = new System.Drawing.Point(126, 85);
-            this.bulletSpeedMidbtn.Name = "bulletSpeedMidbtn";
-            this.bulletSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
-            this.bulletSpeedMidbtn.TabIndex = 20;
-            this.bulletSpeedMidbtn.Text = "Medium";
-            this.bulletSpeedMidbtn.UseVisualStyleBackColor = false;
-            this.bulletSpeedMidbtn.Click += new System.EventHandler(this.bulletSpeedMidbtn_Click);
-            // 
-            // bulletSpeedSlowbtn
-            // 
-            this.bulletSpeedSlowbtn.Location = new System.Drawing.Point(126, 114);
-            this.bulletSpeedSlowbtn.Name = "bulletSpeedSlowbtn";
-            this.bulletSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
-            this.bulletSpeedSlowbtn.TabIndex = 19;
-            this.bulletSpeedSlowbtn.Text = "Slow";
-            this.bulletSpeedSlowbtn.UseVisualStyleBackColor = true;
-            this.bulletSpeedSlowbtn.Click += new System.EventHandler(this.bulletSpeedSlowbtn_Click);
-            // 
-            // bulletSpeedFastbtn
-            // 
-            this.bulletSpeedFastbtn.Location = new System.Drawing.Point(126, 56);
-            this.bulletSpeedFastbtn.Name = "bulletSpeedFastbtn";
-            this.bulletSpeedFastbtn.Size = new System.Drawing.Size(75, 23);
-            this.bulletSpeedFastbtn.TabIndex = 18;
-            this.bulletSpeedFastbtn.Text = "Fast";
-            this.bulletSpeedFastbtn.UseVisualStyleBackColor = true;
-            this.bulletSpeedFastbtn.Click += new System.EventHandler(this.bulletSpeedFastbtn_Click);
+            this.userMsglbl.AutoSize = true;
+            this.userMsglbl.Location = new System.Drawing.Point(332, 379);
+            this.userMsglbl.Name = "userMsglbl";
+            this.userMsglbl.Size = new System.Drawing.Size(0, 13);
+            this.userMsglbl.TabIndex = 22;
             // 
             // signInbtn
             // 
@@ -389,6 +367,7 @@ namespace SpaceInvaders
             this.signInbtn.Name = "signInbtn";
             this.signInbtn.Size = new System.Drawing.Size(123, 23);
             this.signInbtn.TabIndex = 16;
+            this.signInbtn.TabStop = false;
             this.signInbtn.Text = "Sign In";
             this.signInbtn.UseVisualStyleBackColor = true;
             this.signInbtn.Click += new System.EventHandler(this.signInbtn_Click);
@@ -399,6 +378,7 @@ namespace SpaceInvaders
             this.signInTextBox.Name = "signInTextBox";
             this.signInTextBox.Size = new System.Drawing.Size(123, 20);
             this.signInTextBox.TabIndex = 15;
+            this.signInTextBox.TabStop = false;
             // 
             // signInlbl
             // 
@@ -415,6 +395,7 @@ namespace SpaceInvaders
             this.saveUserbtn.Name = "saveUserbtn";
             this.saveUserbtn.Size = new System.Drawing.Size(138, 23);
             this.saveUserbtn.TabIndex = 13;
+            this.saveUserbtn.TabStop = false;
             this.saveUserbtn.Text = "Save";
             this.saveUserbtn.UseVisualStyleBackColor = true;
             this.saveUserbtn.Click += new System.EventHandler(this.saveUserbtn_Click);
@@ -425,6 +406,7 @@ namespace SpaceInvaders
             this.saveChangesbtn.Name = "saveChangesbtn";
             this.saveChangesbtn.Size = new System.Drawing.Size(311, 86);
             this.saveChangesbtn.TabIndex = 21;
+            this.saveChangesbtn.TabStop = false;
             this.saveChangesbtn.Text = "Save All Changes";
             this.saveChangesbtn.UseVisualStyleBackColor = true;
             this.saveChangesbtn.Click += new System.EventHandler(this.saveChangesbtn_Click);
@@ -435,6 +417,7 @@ namespace SpaceInvaders
             this.userTextbox.Name = "userTextbox";
             this.userTextbox.Size = new System.Drawing.Size(138, 20);
             this.userTextbox.TabIndex = 12;
+            this.userTextbox.TabStop = false;
             // 
             // makeUserlbl
             // 
@@ -452,6 +435,7 @@ namespace SpaceInvaders
             this.controlArrowsbtn.Name = "controlArrowsbtn";
             this.controlArrowsbtn.Size = new System.Drawing.Size(316, 23);
             this.controlArrowsbtn.TabIndex = 10;
+            this.controlArrowsbtn.TabStop = false;
             this.controlArrowsbtn.Text = "left arrow, right arrow, spacebar";
             this.controlArrowsbtn.UseVisualStyleBackColor = false;
             this.controlArrowsbtn.Click += new System.EventHandler(this.controlArrowsbtn_Click);
@@ -462,6 +446,7 @@ namespace SpaceInvaders
             this.controlKeysbtn.Name = "controlKeysbtn";
             this.controlKeysbtn.Size = new System.Drawing.Size(316, 23);
             this.controlKeysbtn.TabIndex = 9;
+            this.controlKeysbtn.TabStop = false;
             this.controlKeysbtn.Text = "\'a\', \'s\', \'w\'";
             this.controlKeysbtn.UseVisualStyleBackColor = true;
             this.controlKeysbtn.Click += new System.EventHandler(this.controlKeysbtn_Click);
@@ -472,9 +457,44 @@ namespace SpaceInvaders
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(75, 313);
             this.exitBtn.TabIndex = 8;
+            this.exitBtn.TabStop = false;
             this.exitBtn.Text = "Continue";
             this.exitBtn.UseVisualStyleBackColor = true;
             this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
+            // 
+            // bulletSpeedMidbtn
+            // 
+            this.bulletSpeedMidbtn.BackColor = System.Drawing.SystemColors.Highlight;
+            this.bulletSpeedMidbtn.Location = new System.Drawing.Point(126, 85);
+            this.bulletSpeedMidbtn.Name = "bulletSpeedMidbtn";
+            this.bulletSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
+            this.bulletSpeedMidbtn.TabIndex = 20;
+            this.bulletSpeedMidbtn.TabStop = false;
+            this.bulletSpeedMidbtn.Text = "Medium";
+            this.bulletSpeedMidbtn.UseVisualStyleBackColor = false;
+            this.bulletSpeedMidbtn.Click += new System.EventHandler(this.bulletSpeedMidbtn_Click);
+            // 
+            // bulletSpeedSlowbtn
+            // 
+            this.bulletSpeedSlowbtn.Location = new System.Drawing.Point(126, 114);
+            this.bulletSpeedSlowbtn.Name = "bulletSpeedSlowbtn";
+            this.bulletSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
+            this.bulletSpeedSlowbtn.TabIndex = 19;
+            this.bulletSpeedSlowbtn.TabStop = false;
+            this.bulletSpeedSlowbtn.Text = "Slow";
+            this.bulletSpeedSlowbtn.UseVisualStyleBackColor = true;
+            this.bulletSpeedSlowbtn.Click += new System.EventHandler(this.bulletSpeedSlowbtn_Click);
+            // 
+            // bulletSpeedFastbtn
+            // 
+            this.bulletSpeedFastbtn.Location = new System.Drawing.Point(126, 56);
+            this.bulletSpeedFastbtn.Name = "bulletSpeedFastbtn";
+            this.bulletSpeedFastbtn.Size = new System.Drawing.Size(75, 23);
+            this.bulletSpeedFastbtn.TabIndex = 18;
+            this.bulletSpeedFastbtn.TabStop = false;
+            this.bulletSpeedFastbtn.Text = "Fast";
+            this.bulletSpeedFastbtn.UseVisualStyleBackColor = true;
+            this.bulletSpeedFastbtn.Click += new System.EventHandler(this.bulletSpeedFastbtn_Click);
             // 
             // enemyBombSlowbtn
             // 
@@ -483,6 +503,7 @@ namespace SpaceInvaders
             this.enemyBombSlowbtn.Name = "enemyBombSlowbtn";
             this.enemyBombSlowbtn.Size = new System.Drawing.Size(75, 23);
             this.enemyBombSlowbtn.TabIndex = 6;
+            this.enemyBombSlowbtn.TabStop = false;
             this.enemyBombSlowbtn.Text = "Slow";
             this.enemyBombSlowbtn.UseVisualStyleBackColor = false;
             this.enemyBombSlowbtn.Click += new System.EventHandler(this.enemyBombSlowbtn_Click);
@@ -493,6 +514,7 @@ namespace SpaceInvaders
             this.enemyBombFastbtn.Name = "enemyBombFastbtn";
             this.enemyBombFastbtn.Size = new System.Drawing.Size(75, 23);
             this.enemyBombFastbtn.TabIndex = 5;
+            this.enemyBombFastbtn.TabStop = false;
             this.enemyBombFastbtn.Text = "Fast";
             this.enemyBombFastbtn.UseVisualStyleBackColor = true;
             this.enemyBombFastbtn.Click += new System.EventHandler(this.enemyBombFastbtn_Click);
@@ -504,6 +526,7 @@ namespace SpaceInvaders
             this.playerSpeedMidbtn.Name = "playerSpeedMidbtn";
             this.playerSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
             this.playerSpeedMidbtn.TabIndex = 4;
+            this.playerSpeedMidbtn.TabStop = false;
             this.playerSpeedMidbtn.Text = "Medium";
             this.playerSpeedMidbtn.UseVisualStyleBackColor = false;
             this.playerSpeedMidbtn.Click += new System.EventHandler(this.playerSpeedMidbtn_Click);
@@ -514,6 +537,7 @@ namespace SpaceInvaders
             this.playerSpeedSlowbtn.Name = "playerSpeedSlowbtn";
             this.playerSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
             this.playerSpeedSlowbtn.TabIndex = 3;
+            this.playerSpeedSlowbtn.TabStop = false;
             this.playerSpeedSlowbtn.Text = "Slow";
             this.playerSpeedSlowbtn.UseVisualStyleBackColor = true;
             this.playerSpeedSlowbtn.Click += new System.EventHandler(this.playerSpeedSlowbtn_Click);
@@ -524,6 +548,7 @@ namespace SpaceInvaders
             this.playerSpeedFastbtn.Name = "playerSpeedFastbtn";
             this.playerSpeedFastbtn.Size = new System.Drawing.Size(75, 23);
             this.playerSpeedFastbtn.TabIndex = 2;
+            this.playerSpeedFastbtn.TabStop = false;
             this.playerSpeedFastbtn.Text = "Fast";
             this.playerSpeedFastbtn.UseVisualStyleBackColor = true;
             this.playerSpeedFastbtn.Click += new System.EventHandler(this.playerSpeedFastbtn_Click);
@@ -564,14 +589,6 @@ namespace SpaceInvaders
             this.playerMovementSpeedlbl.TabIndex = 0;
             this.playerMovementSpeedlbl.Text = "Movement Speed";
             // 
-            // userMsglbl
-            // 
-            this.userMsglbl.AutoSize = true;
-            this.userMsglbl.Location = new System.Drawing.Point(332, 379);
-            this.userMsglbl.Name = "userMsglbl";
-            this.userMsglbl.Size = new System.Drawing.Size(0, 13);
-            this.userMsglbl.TabIndex = 22;
-            // 
             // Form1
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -606,7 +623,7 @@ namespace SpaceInvaders
 
 		private void HandleKeys()
 		{
-            if (!useArrows)
+            if (useArrows)
             {
                 switch (CurrentKeyDown)
                 {
@@ -635,7 +652,7 @@ namespace SpaceInvaders
                         break;
                 }
             }
-            else if (useArrows)
+            else if (!useArrows)
             {
                 switch (CurrentKeyDown)
                 {
