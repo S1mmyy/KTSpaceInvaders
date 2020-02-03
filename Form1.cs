@@ -95,7 +95,6 @@ namespace SpaceInvaders
         private Button bulletSpeedSlowbtn;
         private Button bulletSpeedFastbtn;
         private Label userMsglbl;
-        private Man player = new Man();
 
         [DllImport("winmm.dll")]
 		public static extern long PlaySound(String lpszName, long hModule, long dwFlags);
@@ -1105,8 +1104,25 @@ namespace SpaceInvaders
         //save a new user profile
         private void saveUserbtn_Click(object sender, EventArgs e)
         {
-            currentSettings.Name = userTextbox.Text;
-            this.saveChangesbtn_Click(sender, e);
+            if (userTextbox.Text != "")
+            {
+                //makes sure there isnt an existing profile with the same name
+                foreach (UserAttributes currUser in savedProfiles)
+                {
+                    if (currUser.Name == userTextbox.Text)
+                    {
+                        currentSettings = currUser;
+                        LoadSettings(currentSettings, sender, e);
+                        userMsglbl.Text = "Loaded profile: \n" + currentSettings.Name;
+                        userTextbox.Text = "";
+                        return;
+                    }
+                }
+                savedProfiles.Add(currentSettings);
+                currentSettings.Name = userTextbox.Text;
+                this.saveChangesbtn_Click(sender, e);
+                userTextbox.Text = "";
+            }
         }
 
         //save the current set of options to the current profile, and saves to their profile
@@ -1114,25 +1130,15 @@ namespace SpaceInvaders
         {
             currentSettings.BombSpeed = TheBomb.TheBombInterval;
             currentSettings.BulletSpeed = TheBullet.BulletInterval;
-            currentSettings.MovementSpeed = player.Interval;
+            currentSettings.MovementSpeed = TheMan.Interval;
             currentSettings.UseArrows = useArrows;
-
-            for (int i = 0; i < savedProfiles.Count; i++)
+            
+            using (StreamWriter writer = new StreamWriter("userprofiles.xml"))
             {
-                if (savedProfiles[i].Name == currentSettings.Name)
-                {
-                    savedProfiles[i] = currentSettings;
-                    break;
-                }
-                else if (i == savedProfiles.Count - 1)
-                {
-                    savedProfiles.Add(currentSettings);
-                    using (StreamWriter writer = new StreamWriter("userprofiles.xml"))
-                    {
-                        serializer.Serialize(writer, savedProfiles);
-                    }
-                }
+                serializer.Serialize(writer, savedProfiles);
             }
+
+            userMsglbl.Text = "Made new profile: \n" + currentSettings.Name;
         }
 
         //looks for a profile with the name that's input, and will load settings if find that profile
@@ -1150,6 +1156,7 @@ namespace SpaceInvaders
                     if (currUser.Name == signInTextBox.Text)
                     {
                         currentSettings = currUser;
+                        LoadSettings(currentSettings, sender, e);
                         userMsglbl.Text = "Loaded profile: \n" + currentSettings.Name;
                         signInTextBox.Text = "";
                         return;
@@ -1160,110 +1167,129 @@ namespace SpaceInvaders
             }
         }
 
+        //applies the settings from a saved profile that signs in
+        private void LoadSettings(UserAttributes applySettings, object senderPass, EventArgs ePass)
+        {
+            switch (applySettings.BulletSpeed)
+            {
+                case 30:
+                    bulletSpeedFastbtn_Click(senderPass, ePass);
+                    break;
+                case 20:
+                    bulletSpeedMidbtn_Click(senderPass, ePass);
+                    break;
+                case 10:
+                    bulletSpeedSlowbtn_Click(senderPass, ePass);
+                    break;
+            }
+
+            switch (applySettings.BombSpeed)
+            {
+                case 15:
+                    enemyBombFastbtn_Click(senderPass, ePass);
+                    break;
+                case 5:
+                    enemyBombSlowbtn_Click(senderPass, ePass);
+                    break;
+            }
+
+            switch (applySettings.MovementSpeed)
+            {
+                case 15:
+                    playerSpeedFastbtn_Click(senderPass, ePass);
+                    break;
+                case 10:
+                    playerSpeedMidbtn_Click(senderPass, ePass);
+                    break;
+                case 5:
+                    playerSpeedSlowbtn_Click(senderPass, ePass);
+                    break;
+            }
+
+            if (applySettings.UseArrows)
+            {
+                controlArrowsbtn_Click(senderPass, ePass);
+            }
+            else
+            {
+                controlKeysbtn_Click(senderPass, ePass);
+            }
+        }
+
         private void bulletSpeedFastbtn_Click(object sender, EventArgs e)
         {
-            if (TheBullet.BulletInterval != 30)
-            {
-                TheBullet.BulletInterval = 30;
-                bulletSpeedFastbtn.BackColor = SystemColors.Highlight;
-                bulletSpeedMidbtn.BackColor = SystemColors.Control;
-                bulletSpeedSlowbtn.BackColor = SystemColors.Control;
-            }
+            TheBullet.BulletInterval = 30;
+            bulletSpeedFastbtn.BackColor = SystemColors.Highlight;
+            bulletSpeedMidbtn.BackColor = SystemColors.Control;
+            bulletSpeedSlowbtn.BackColor = SystemColors.Control;
         }
 
         private void bulletSpeedMidbtn_Click(object sender, EventArgs e)
         {
-            if (TheBullet.BulletInterval != 20)
-            {
-                TheBullet.BulletInterval = 20;
-                bulletSpeedFastbtn.BackColor = SystemColors.Control;
-                bulletSpeedMidbtn.BackColor = SystemColors.Highlight;
-                bulletSpeedSlowbtn.BackColor = SystemColors.Control;
-            }
+            TheBullet.BulletInterval = 20;
+            bulletSpeedFastbtn.BackColor = SystemColors.Control;
+            bulletSpeedMidbtn.BackColor = SystemColors.Highlight;
+            bulletSpeedSlowbtn.BackColor = SystemColors.Control;
         }
 
         private void bulletSpeedSlowbtn_Click(object sender, EventArgs e)
         {
-            if (TheBullet.BulletInterval != 10)
-            {
-                TheBullet.BulletInterval = 10;
-                bulletSpeedFastbtn.BackColor = SystemColors.Control;
-                bulletSpeedMidbtn.BackColor = SystemColors.Control;
-                bulletSpeedSlowbtn.BackColor = SystemColors.Highlight;
-            }
+            TheBullet.BulletInterval = 10;
+            bulletSpeedFastbtn.BackColor = SystemColors.Control;
+            bulletSpeedMidbtn.BackColor = SystemColors.Control;
+            bulletSpeedSlowbtn.BackColor = SystemColors.Highlight;
         }
 
         private void playerSpeedFastbtn_Click(object sender, EventArgs e)
         {
-            if (player.Interval != 15)
-            {
-                player.Interval = 15;
-                playerSpeedFastbtn.BackColor = SystemColors.Highlight;
-                playerSpeedMidbtn.BackColor = SystemColors.Control;
-                playerSpeedSlowbtn.BackColor = SystemColors.Control;
-            }
+            TheMan.Interval = 15;
+            playerSpeedFastbtn.BackColor = SystemColors.Highlight;
+            playerSpeedMidbtn.BackColor = SystemColors.Control;
+            playerSpeedSlowbtn.BackColor = SystemColors.Control;
         }
 
         private void playerSpeedMidbtn_Click(object sender, EventArgs e)
         {
-            if (player.Interval != 10)
-            {
-                player.Interval = 10;
-                playerSpeedFastbtn.BackColor = SystemColors.Control;
-                playerSpeedMidbtn.BackColor = SystemColors.Highlight;
-                playerSpeedSlowbtn.BackColor = SystemColors.Control;
-            }
+            TheMan.Interval = 10;
+            playerSpeedFastbtn.BackColor = SystemColors.Control;
+            playerSpeedMidbtn.BackColor = SystemColors.Highlight;
+            playerSpeedSlowbtn.BackColor = SystemColors.Control;
         }
 
         private void playerSpeedSlowbtn_Click(object sender, EventArgs e)
         {
-            if (player.Interval != 5)
-            {
-                player.Interval = 5;
-                playerSpeedFastbtn.BackColor = SystemColors.Control;
-                playerSpeedMidbtn.BackColor = SystemColors.Control;
-                playerSpeedSlowbtn.BackColor = SystemColors.Highlight;
-            }
+            TheMan.Interval = 5;
+            playerSpeedFastbtn.BackColor = SystemColors.Control;
+            playerSpeedMidbtn.BackColor = SystemColors.Control;
+            playerSpeedSlowbtn.BackColor = SystemColors.Highlight;
         }
 
         private void enemyBombFastbtn_Click(object sender, EventArgs e)
         {
-            if (TheBomb.TheBombInterval != 15)
-            {
-                TheBomb.TheBombInterval = 15;
-                enemyBombFastbtn.BackColor = SystemColors.Highlight;
-                enemyBombSlowbtn.BackColor = SystemColors.Control;
-            }
+            TheBomb.TheBombInterval = 15;
+            enemyBombFastbtn.BackColor = SystemColors.Highlight;
+            enemyBombSlowbtn.BackColor = SystemColors.Control;
         }
 
         private void enemyBombSlowbtn_Click(object sender, EventArgs e)
         {
-            if (TheBomb.TheBombInterval != 5)
-            {
-                TheBomb.TheBombInterval = 5;
-                enemyBombFastbtn.BackColor = SystemColors.Control;
-                enemyBombSlowbtn.BackColor = SystemColors.Highlight;
-            }
+            TheBomb.TheBombInterval = 5;
+            enemyBombFastbtn.BackColor = SystemColors.Control;
+            enemyBombSlowbtn.BackColor = SystemColors.Highlight;
         }
 
         private void controlArrowsbtn_Click(object sender, EventArgs e)
         {
-            if (!useArrows)
-            {
-                useArrows = true;
-                controlArrowsbtn.BackColor = SystemColors.Highlight;
-                controlKeysbtn.BackColor = SystemColors.Control;
-            }
+            useArrows = true;
+            controlArrowsbtn.BackColor = SystemColors.Highlight;
+            controlKeysbtn.BackColor = SystemColors.Control;
         }
 
         private void controlKeysbtn_Click(object sender, EventArgs e)
         {
-            if (useArrows)
-            {
-                useArrows = false;
-                controlArrowsbtn.BackColor = SystemColors.Control;
-                controlKeysbtn.BackColor = SystemColors.Highlight;
-            }
+            useArrows = false;
+            controlArrowsbtn.BackColor = SystemColors.Control;
+            controlKeysbtn.BackColor = SystemColors.Highlight;
         }
     }
 }
