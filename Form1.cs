@@ -34,7 +34,7 @@ namespace SpaceInvaders
 
         private bool ActiveBullet = false;
 
-        private int NumberOfMen = 3;
+        private int NumberOfMen = kNumberOfTries;
         private Man TheMan = null;
         private Saucer CurrentSaucer = null;
         private bool SaucerStart = false;
@@ -151,8 +151,7 @@ namespace SpaceInvaders
 		{
 			TheMan = new Man();
 			TheMan.Position.Y = ClientRectangle.Bottom - 50;
-			NumberOfMen = 3;
-            TheMan.Interval = 5;
+            TheMan.Interval = currentSettings.MovementSpeed;
 		}
 
 		private void InitializeScore()
@@ -431,9 +430,9 @@ namespace SpaceInvaders
             // controlArrowsbtn
             // 
             this.controlArrowsbtn.BackColor = System.Drawing.SystemColors.Highlight;
-            this.controlArrowsbtn.Location = new System.Drawing.Point(10, 169);
+            this.controlArrowsbtn.Location = new System.Drawing.Point(15, 169);
             this.controlArrowsbtn.Name = "controlArrowsbtn";
-            this.controlArrowsbtn.Size = new System.Drawing.Size(316, 23);
+            this.controlArrowsbtn.Size = new System.Drawing.Size(311, 23);
             this.controlArrowsbtn.TabIndex = 10;
             this.controlArrowsbtn.TabStop = false;
             this.controlArrowsbtn.Text = "left arrow, right arrow, spacebar";
@@ -442,9 +441,9 @@ namespace SpaceInvaders
             // 
             // controlKeysbtn
             // 
-            this.controlKeysbtn.Location = new System.Drawing.Point(10, 198);
+            this.controlKeysbtn.Location = new System.Drawing.Point(15, 198);
             this.controlKeysbtn.Name = "controlKeysbtn";
-            this.controlKeysbtn.Size = new System.Drawing.Size(316, 23);
+            this.controlKeysbtn.Size = new System.Drawing.Size(311, 23);
             this.controlKeysbtn.TabIndex = 9;
             this.controlKeysbtn.TabStop = false;
             this.controlKeysbtn.Text = "\'a\', \'s\', \'w\'";
@@ -464,7 +463,7 @@ namespace SpaceInvaders
             // 
             // bulletSpeedMidbtn
             // 
-            this.bulletSpeedMidbtn.BackColor = System.Drawing.SystemColors.Highlight;
+            this.bulletSpeedMidbtn.BackColor = System.Drawing.SystemColors.Control;
             this.bulletSpeedMidbtn.Location = new System.Drawing.Point(126, 85);
             this.bulletSpeedMidbtn.Name = "bulletSpeedMidbtn";
             this.bulletSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
@@ -476,13 +475,14 @@ namespace SpaceInvaders
             // 
             // bulletSpeedSlowbtn
             // 
+            this.bulletSpeedSlowbtn.BackColor = System.Drawing.SystemColors.Highlight;
             this.bulletSpeedSlowbtn.Location = new System.Drawing.Point(126, 114);
             this.bulletSpeedSlowbtn.Name = "bulletSpeedSlowbtn";
             this.bulletSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
             this.bulletSpeedSlowbtn.TabIndex = 19;
             this.bulletSpeedSlowbtn.TabStop = false;
             this.bulletSpeedSlowbtn.Text = "Slow";
-            this.bulletSpeedSlowbtn.UseVisualStyleBackColor = true;
+            this.bulletSpeedSlowbtn.UseVisualStyleBackColor = false;
             this.bulletSpeedSlowbtn.Click += new System.EventHandler(this.bulletSpeedSlowbtn_Click);
             // 
             // bulletSpeedFastbtn
@@ -596,8 +596,12 @@ namespace SpaceInvaders
             this.ClientSize = new System.Drawing.Size(672, 622);
             this.Controls.Add(this.menuPnl);
             this.Controls.Add(this.menuBtn);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.KeyPreview = true;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(688, 682);
             this.Menu = this.mainMenu1;
+            this.MinimumSize = new System.Drawing.Size(688, 682);
             this.Name = "Form1";
             this.Text = "Space Invaders Game";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -916,7 +920,7 @@ namespace SpaceInvaders
 		{
 			if (TheMan.Died)
 			{
-			    NumberOfMen --;
+			    NumberOfMen--;
                 menuItem5.Text = "Lives = " + NumberOfMen;
                 if (NumberOfMen == 0)
 				{
@@ -973,7 +977,7 @@ namespace SpaceInvaders
 
 			if (GameGoing == false)
 			{
-				if (TimerCounter % 6 == 0)
+				if (TimerCounter % TheSpeed == 0)
 					MoveInvadersInPlace();
 				Invalidate();
 				return;
@@ -1038,6 +1042,7 @@ namespace SpaceInvaders
                     {
                         NumberOfMen++;
                     }
+                    LoadSettings(currentSettings, sender, e);
 				}
 			}
 
@@ -1080,12 +1085,12 @@ namespace SpaceInvaders
         //pause and unpause game
         private void menuItem4_Click(object sender, EventArgs e)
         {
-            if (GameGoing == false && kNumberOfTries > 0)
+            if (GameGoing == false && NumberOfMen > 0)
             {
                 GameGoing = true;
                 timer1.Enabled = true;
             }
-            else if (GameGoing == true && kNumberOfTries > 0)
+            else if (GameGoing == true && NumberOfMen > 0)
             {
                 GameGoing = false;
                 timer1.Enabled = false;
@@ -1233,6 +1238,7 @@ namespace SpaceInvaders
         private void bulletSpeedFastbtn_Click(object sender, EventArgs e)
         {
             TheBullet.BulletInterval = 30;
+            currentSettings.BulletSpeed = 30;
             bulletSpeedFastbtn.BackColor = SystemColors.Highlight;
             bulletSpeedMidbtn.BackColor = SystemColors.Control;
             bulletSpeedSlowbtn.BackColor = SystemColors.Control;
@@ -1241,6 +1247,7 @@ namespace SpaceInvaders
         private void bulletSpeedMidbtn_Click(object sender, EventArgs e)
         {
             TheBullet.BulletInterval = 20;
+            currentSettings.BulletSpeed = 20;
             bulletSpeedFastbtn.BackColor = SystemColors.Control;
             bulletSpeedMidbtn.BackColor = SystemColors.Highlight;
             bulletSpeedSlowbtn.BackColor = SystemColors.Control;
@@ -1249,6 +1256,7 @@ namespace SpaceInvaders
         private void bulletSpeedSlowbtn_Click(object sender, EventArgs e)
         {
             TheBullet.BulletInterval = 10;
+            currentSettings.BulletSpeed = 10;
             bulletSpeedFastbtn.BackColor = SystemColors.Control;
             bulletSpeedMidbtn.BackColor = SystemColors.Control;
             bulletSpeedSlowbtn.BackColor = SystemColors.Highlight;
@@ -1257,6 +1265,7 @@ namespace SpaceInvaders
         private void playerSpeedFastbtn_Click(object sender, EventArgs e)
         {
             TheMan.Interval = 15;
+            currentSettings.MovementSpeed = 15;
             playerSpeedFastbtn.BackColor = SystemColors.Highlight;
             playerSpeedMidbtn.BackColor = SystemColors.Control;
             playerSpeedSlowbtn.BackColor = SystemColors.Control;
@@ -1265,6 +1274,7 @@ namespace SpaceInvaders
         private void playerSpeedMidbtn_Click(object sender, EventArgs e)
         {
             TheMan.Interval = 10;
+            currentSettings.MovementSpeed = 10;
             playerSpeedFastbtn.BackColor = SystemColors.Control;
             playerSpeedMidbtn.BackColor = SystemColors.Highlight;
             playerSpeedSlowbtn.BackColor = SystemColors.Control;
@@ -1273,6 +1283,7 @@ namespace SpaceInvaders
         private void playerSpeedSlowbtn_Click(object sender, EventArgs e)
         {
             TheMan.Interval = 5;
+            currentSettings.MovementSpeed = 5;
             playerSpeedFastbtn.BackColor = SystemColors.Control;
             playerSpeedMidbtn.BackColor = SystemColors.Control;
             playerSpeedSlowbtn.BackColor = SystemColors.Highlight;
@@ -1281,6 +1292,7 @@ namespace SpaceInvaders
         private void enemyBombFastbtn_Click(object sender, EventArgs e)
         {
             TheBomb.TheBombInterval = 15;
+            currentSettings.BombSpeed = 15;
             enemyBombFastbtn.BackColor = SystemColors.Highlight;
             enemyBombSlowbtn.BackColor = SystemColors.Control;
         }
@@ -1288,6 +1300,7 @@ namespace SpaceInvaders
         private void enemyBombSlowbtn_Click(object sender, EventArgs e)
         {
             TheBomb.TheBombInterval = 5;
+            currentSettings.BombSpeed = 5;
             enemyBombFastbtn.BackColor = SystemColors.Control;
             enemyBombSlowbtn.BackColor = SystemColors.Highlight;
         }
@@ -1295,6 +1308,7 @@ namespace SpaceInvaders
         private void controlArrowsbtn_Click(object sender, EventArgs e)
         {
             useArrows = true;
+            currentSettings.UseArrows = true;
             controlArrowsbtn.BackColor = SystemColors.Highlight;
             controlKeysbtn.BackColor = SystemColors.Control;
         }
@@ -1302,6 +1316,7 @@ namespace SpaceInvaders
         private void controlKeysbtn_Click(object sender, EventArgs e)
         {
             useArrows = false;
+            currentSettings.UseArrows = false;
             controlArrowsbtn.BackColor = SystemColors.Control;
             controlKeysbtn.BackColor = SystemColors.Highlight;
         }
