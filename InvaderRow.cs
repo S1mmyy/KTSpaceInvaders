@@ -12,7 +12,7 @@ namespace SpaceInvaders
 		public Point LastPosition = new Point(0, 0);
 		public const int kBombIntervalSpacing = 50;
 
-		public InvaderRow(string gif1, string gif2, int rowNum)
+		public InvaderRow(string gif1, string gif2, int rowNum, int rounds)
 		{
 			//
 			// TODO: Add constructor logic here
@@ -23,6 +23,10 @@ namespace SpaceInvaders
 			    Invaders[i].Position.X = i * Invaders[i].GetBounds().Width + 5;
 			    Invaders[i].Position.Y = rowNum * Invaders[i].GetBounds().Height + 10;
 			    Invaders[i].SetCounter(i*kBombIntervalSpacing);
+                if (rounds != 0)
+                {
+                    Invaders[i].SpeedUp();
+                }
 			}
 
 			LastPosition = Invaders[Invaders.Length - 1].Position;

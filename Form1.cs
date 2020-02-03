@@ -17,7 +17,7 @@ namespace SpaceInvaders
     /// <summary>
     /// Summary description for Form1.
     /// </summary>
-    public class Form1 : System.Windows.Forms.Form
+    public class Form1 : Form
     {
         private System.Windows.Forms.Timer timer1;
         private System.ComponentModel.IContainer components;
@@ -58,12 +58,12 @@ namespace SpaceInvaders
 
 		private string CurrentKeyDown = "";
 		private string LastKeyDown = "";
-        private System.Windows.Forms.MainMenu mainMenu1;
-        private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.MenuItem menuItem2;
-        private System.Windows.Forms.MenuItem menuItem3;
-        private System.Windows.Forms.MenuItem menuItem4;
-        private System.Windows.Forms.MenuItem menuItem5;
+        private MainMenu mainMenu1;
+        private MenuItem menuItem1;
+        private MenuItem menuItem2;
+        private MenuItem menuItem3;
+        private MenuItem menuItem4;
+        private MenuItem menuItem5;
 
         private Button menuBtn;
         private Panel menuPnl;
@@ -72,6 +72,9 @@ namespace SpaceInvaders
         private Button playerSpeedMidbtn;
         private Button playerSpeedSlowbtn;
         private Button playerSpeedFastbtn;
+        private Button bulletSpeedMidbtn;
+        private Button bulletSpeedSlowbtn;
+        private Button bulletSpeedFastbtn;
         private Label playerInputlbl;
         private Label enemyBombSpeedlbl;
         private Label playerBulletSpeedlbl;
@@ -88,9 +91,6 @@ namespace SpaceInvaders
         private Button signInbtn;
         private TextBox signInTextBox;
         private Label signInlbl;
-        private Button bulletSpeedMidbtn;
-        private Button bulletSpeedSlowbtn;
-        private Button bulletSpeedFastbtn;
         private Label userMsglbl;
 
         [DllImport("winmm.dll")]
@@ -175,11 +175,11 @@ namespace SpaceInvaders
 
 		void InitializeInvaderRows(int level)
 		{
-            InvaderRows[0] = new InvaderRow("invader1.gif", "invader1c.gif", 2 + level);
-		    InvaderRows[1] = new InvaderRow("invader2.gif", "invader2c.gif", 3 + level);
-		    InvaderRows[2] = new InvaderRow("invader2.gif", "invader2c.gif", 4 + level);
-		    InvaderRows[3] = new InvaderRow("invader3.gif", "invader3c.gif", 5 + level);
-		    InvaderRows[4] = new InvaderRow("invader3.gif", "invader3c.gif", 6 + level);
+            InvaderRows[0] = new InvaderRow("invader1.gif", "invader1c.gif", 2 + level, level);
+		    InvaderRows[1] = new InvaderRow("invader2.gif", "invader2c.gif", 3 + level, level);
+		    InvaderRows[2] = new InvaderRow("invader2.gif", "invader2c.gif", 4 + level, level);
+		    InvaderRows[3] = new InvaderRow("invader3.gif", "invader3c.gif", 5 + level, level);
+		    InvaderRows[4] = new InvaderRow("invader3.gif", "invader3c.gif", 6 + level, level);
 		}
 
 		private string m_strCurrentSoundFile = "1.wav";
@@ -325,9 +325,6 @@ namespace SpaceInvaders
             // menuPnl
             // 
             this.menuPnl.Controls.Add(this.userMsglbl);
-            this.menuPnl.Controls.Add(this.bulletSpeedMidbtn);
-            this.menuPnl.Controls.Add(this.bulletSpeedSlowbtn);
-            this.menuPnl.Controls.Add(this.bulletSpeedFastbtn);
             this.menuPnl.Controls.Add(this.signInbtn);
             this.menuPnl.Controls.Add(this.signInTextBox);
             this.menuPnl.Controls.Add(this.signInlbl);
@@ -338,6 +335,9 @@ namespace SpaceInvaders
             this.menuPnl.Controls.Add(this.controlArrowsbtn);
             this.menuPnl.Controls.Add(this.controlKeysbtn);
             this.menuPnl.Controls.Add(this.exitBtn);
+            this.menuPnl.Controls.Add(this.bulletSpeedMidbtn);
+            this.menuPnl.Controls.Add(this.bulletSpeedSlowbtn);
+            this.menuPnl.Controls.Add(this.bulletSpeedFastbtn);
             this.menuPnl.Controls.Add(this.enemyBombSlowbtn);
             this.menuPnl.Controls.Add(this.enemyBombFastbtn);
             this.menuPnl.Controls.Add(this.playerSpeedMidbtn);
