@@ -1121,10 +1121,19 @@ namespace SpaceInvaders
         //close the menu
         private void exitBtn_Click(object sender, EventArgs e)
         {
-            menuPnl.Visible = false;
-            menuBtn.Visible = true;
-            GameGoing = true;
-            timer1.Enabled = true;
+            if (currentSettings.Name == "")
+            {
+                string message = "You need to sign in, or make an account!";
+                string title = "Important";
+                MessageBox.Show(message, title);
+            }
+            else
+            {
+                menuPnl.Visible = false;
+                menuBtn.Visible = true;
+                GameGoing = true;
+                timer1.Enabled = true;
+            }
         }
 
         //save a new user profile
