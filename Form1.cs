@@ -1,12 +1,9 @@
 using System;
 using System.Drawing;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
-using System.Data;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -20,7 +17,7 @@ namespace SpaceInvaders
     /// <summary>
     /// Summary description for Form1.
     /// </summary>
-    public class Form1 : System.Windows.Forms.Form
+    public class Form1 : Form
     {
         private System.Windows.Forms.Timer timer1;
         private System.ComponentModel.IContainer components;
@@ -37,7 +34,7 @@ namespace SpaceInvaders
 
         private bool ActiveBullet = false;
 
-        private int NumberOfMen = 3;
+        private int NumberOfMen = kNumberOfTries;
         private Man TheMan = null;
         private Saucer CurrentSaucer = null;
         private bool SaucerStart = false;
@@ -51,20 +48,22 @@ namespace SpaceInvaders
         private InvaderRow TheInvaders = null;
         private bool useArrows = true;
 
-        //XmlSerializer serializer = new XmlSerializer(typeof(List<UserAttributes>));
-        //StreamReader reader = new StreamReader("savedprofiles.xml");
-        private List<UserAttributes> savedProfiles = new List<UserAttributes>();
+        XmlSerializer serializer = new XmlSerializer(typeof(List<UserAttributes>));
+        //sets the settings to the default values
         private UserAttributes currentSettings = new UserAttributes { Name = "", BombSpeed = 5, BulletSpeed = 20, MovementSpeed = 5, UseArrows = true };
+        //a list that can have the current profiles added to it
+        private List<UserAttributes> savedProfiles = new List<UserAttributes>();
 
 		private int kSaucerInterval = 400;
 
 		private string CurrentKeyDown = "";
 		private string LastKeyDown = "";
-        private System.Windows.Forms.MainMenu mainMenu1;
-        private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.MenuItem menuItem2;
-        private System.Windows.Forms.MenuItem menuItem3;
-        private System.Windows.Forms.MenuItem menuItem4;
+        private MainMenu mainMenu1;
+        private MenuItem menuItem1;
+        private MenuItem menuItem2;
+        private MenuItem menuItem3;
+        private MenuItem menuItem4;
+        private MenuItem menuItem5;
 
         private Button menuBtn;
         private Panel menuPnl;
@@ -73,6 +72,9 @@ namespace SpaceInvaders
         private Button playerSpeedMidbtn;
         private Button playerSpeedSlowbtn;
         private Button playerSpeedFastbtn;
+        private Button bulletSpeedMidbtn;
+        private Button bulletSpeedSlowbtn;
+        private Button bulletSpeedFastbtn;
         private Label playerInputlbl;
         private Label enemyBombSpeedlbl;
         private Label playerBulletSpeedlbl;
@@ -87,24 +89,20 @@ namespace SpaceInvaders
         private TextBox userTextbox;
         private Label makeUserlbl;
         private Button signInbtn;
-        private TextBox signIntxtBox;
+        private TextBox signInTextBox;
         private Label signInlbl;
-        private Button bulletSpeedMediumbtn;
-        private Button bulletSpeedSlowbtn;
-        private Button bulletSpeedFastbtn;
-        private MenuItem menuItem5;
-        private MenuItem menuItemHighScore;
-        private Man player = new Man();
+        private Label userMsglbl;
 
         [DllImport("winmm.dll")]
 		public static extern long PlaySound(String lpszName, long hModule, long dwFlags);
 
 		public Form1()
 		{
-            //using (reader)
-            //{
-                //savedProfiles = serializer.Deserialize(reader) as List<UserAttributes>;
-            //}
+            //gets all currently saved profiles
+            using (StreamReader reader = new StreamReader("userprofiles.xml"))
+            {
+                savedProfiles = serializer.Deserialize(reader) as List<UserAttributes>;
+            }
             //
             // Required for Windows Form Designer support
             //
@@ -136,14 +134,12 @@ namespace SpaceInvaders
 			InitializeInvaderRows(TheLevel);
 
 			CurrentSaucer = new Saucer("saucer0.gif", "saucer1.gif", "saucer2.gif");
-
-
+            
 			TheScore.GameOver = false;
 			GameGoing = true;
 			TheSpeed = 6;
             menuItem5.Text = "Lives: " + NumberOfMen;
 		}
-        
 
 		private void InitializeSaucer()
 		{
@@ -155,13 +151,13 @@ namespace SpaceInvaders
 		{
 			TheMan = new Man();
 			TheMan.Position.Y = ClientRectangle.Bottom - 50;
-			NumberOfMen = 3;
+            TheMan.Interval = currentSettings.MovementSpeed;
 		}
 
 		private void InitializeScore()
 		{
 			TheScore = new Score(ClientRectangle.Right - 400, 50);
-			TheHighScore = new HighScore(ClientRectangle.Left + 25, 50);
+			TheHighScore = new HighScore(ClientRectangle.Left + 25, 50, currentSettings);
 			TheHighScore.Read();
 		}
 
@@ -178,11 +174,11 @@ namespace SpaceInvaders
 
 		void InitializeInvaderRows(int level)
 		{
-            InvaderRows[0] = new InvaderRow("invader1.gif", "invader1c.gif", 2 + level);
-		    InvaderRows[1] = new InvaderRow("invader2.gif", "invader2c.gif", 3 + level);
-		    InvaderRows[2] = new InvaderRow("invader2.gif", "invader2c.gif", 4 + level);
-		    InvaderRows[3] = new InvaderRow("invader3.gif", "invader3c.gif", 5 + level);
-		    InvaderRows[4] = new InvaderRow("invader3.gif", "invader3c.gif", 6 + level);
+            InvaderRows[0] = new InvaderRow("invader1.gif", "invader1c.gif", 2 + level, level);
+		    InvaderRows[1] = new InvaderRow("invader2.gif", "invader2c.gif", 3 + level, level);
+		    InvaderRows[2] = new InvaderRow("invader2.gif", "invader2c.gif", 4 + level, level);
+		    InvaderRows[3] = new InvaderRow("invader3.gif", "invader3c.gif", 5 + level, level);
+		    InvaderRows[4] = new InvaderRow("invader3.gif", "invader3c.gif", 6 + level, level);
 		}
 
 		private string m_strCurrentSoundFile = "1.wav";
@@ -243,14 +239,11 @@ namespace SpaceInvaders
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
-            this.menuItemHighScore = new System.Windows.Forms.MenuItem();
             this.menuBtn = new System.Windows.Forms.Button();
             this.menuPnl = new System.Windows.Forms.Panel();
-            this.bulletSpeedMediumbtn = new System.Windows.Forms.Button();
-            this.bulletSpeedSlowbtn = new System.Windows.Forms.Button();
-            this.bulletSpeedFastbtn = new System.Windows.Forms.Button();
+            this.userMsglbl = new System.Windows.Forms.Label();
             this.signInbtn = new System.Windows.Forms.Button();
-            this.signIntxtBox = new System.Windows.Forms.TextBox();
+            this.signInTextBox = new System.Windows.Forms.TextBox();
             this.signInlbl = new System.Windows.Forms.Label();
             this.saveUserbtn = new System.Windows.Forms.Button();
             this.saveChangesbtn = new System.Windows.Forms.Button();
@@ -259,6 +252,9 @@ namespace SpaceInvaders
             this.controlArrowsbtn = new System.Windows.Forms.Button();
             this.controlKeysbtn = new System.Windows.Forms.Button();
             this.exitBtn = new System.Windows.Forms.Button();
+            this.bulletSpeedMidbtn = new System.Windows.Forms.Button();
+            this.bulletSpeedSlowbtn = new System.Windows.Forms.Button();
+            this.bulletSpeedFastbtn = new System.Windows.Forms.Button();
             this.enemyBombSlowbtn = new System.Windows.Forms.Button();
             this.enemyBombFastbtn = new System.Windows.Forms.Button();
             this.playerSpeedMidbtn = new System.Windows.Forms.Button();
@@ -280,8 +276,7 @@ namespace SpaceInvaders
             // 
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem1,
-            this.menuItem5,
-            this.menuItemHighScore});
+            this.menuItem5});
             // 
             // menuItem1
             // 
@@ -315,17 +310,13 @@ namespace SpaceInvaders
             this.menuItem5.Index = 1;
             this.menuItem5.Text = "Lives: ";
             // 
-            // menuItemHighScore
-            // 
-            this.menuItemHighScore.Index = 2;
-            this.menuItemHighScore.Text = "High Score: ";
-            // 
             // menuBtn
             // 
             this.menuBtn.Location = new System.Drawing.Point(585, 12);
             this.menuBtn.Name = "menuBtn";
             this.menuBtn.Size = new System.Drawing.Size(75, 23);
             this.menuBtn.TabIndex = 0;
+            this.menuBtn.TabStop = false;
             this.menuBtn.Text = "Menu";
             this.menuBtn.UseVisualStyleBackColor = true;
             this.menuBtn.Visible = false;
@@ -333,11 +324,9 @@ namespace SpaceInvaders
             // 
             // menuPnl
             // 
-            this.menuPnl.Controls.Add(this.bulletSpeedMediumbtn);
-            this.menuPnl.Controls.Add(this.bulletSpeedSlowbtn);
-            this.menuPnl.Controls.Add(this.bulletSpeedFastbtn);
+            this.menuPnl.Controls.Add(this.userMsglbl);
             this.menuPnl.Controls.Add(this.signInbtn);
-            this.menuPnl.Controls.Add(this.signIntxtBox);
+            this.menuPnl.Controls.Add(this.signInTextBox);
             this.menuPnl.Controls.Add(this.signInlbl);
             this.menuPnl.Controls.Add(this.saveUserbtn);
             this.menuPnl.Controls.Add(this.saveChangesbtn);
@@ -346,6 +335,9 @@ namespace SpaceInvaders
             this.menuPnl.Controls.Add(this.controlArrowsbtn);
             this.menuPnl.Controls.Add(this.controlKeysbtn);
             this.menuPnl.Controls.Add(this.exitBtn);
+            this.menuPnl.Controls.Add(this.bulletSpeedMidbtn);
+            this.menuPnl.Controls.Add(this.bulletSpeedSlowbtn);
+            this.menuPnl.Controls.Add(this.bulletSpeedFastbtn);
             this.menuPnl.Controls.Add(this.enemyBombSlowbtn);
             this.menuPnl.Controls.Add(this.enemyBombFastbtn);
             this.menuPnl.Controls.Add(this.playerSpeedMidbtn);
@@ -360,35 +352,13 @@ namespace SpaceInvaders
             this.menuPnl.Size = new System.Drawing.Size(412, 429);
             this.menuPnl.TabIndex = 1;
             // 
-            // bulletSpeedMediumbtn
+            // userMsglbl
             // 
-            this.bulletSpeedMediumbtn.Location = new System.Drawing.Point(126, 85);
-            this.bulletSpeedMediumbtn.Name = "bulletSpeedMediumbtn";
-            this.bulletSpeedMediumbtn.Size = new System.Drawing.Size(75, 23);
-            this.bulletSpeedMediumbtn.TabIndex = 20;
-            this.bulletSpeedMediumbtn.Text = "Medium";
-            this.bulletSpeedMediumbtn.UseVisualStyleBackColor = true;
-            this.bulletSpeedMediumbtn.Click += new System.EventHandler(this.bulletSpeedMidbtn_Click);
-            // 
-            // bulletSpeedSlowbtn
-            // 
-            this.bulletSpeedSlowbtn.Location = new System.Drawing.Point(126, 114);
-            this.bulletSpeedSlowbtn.Name = "bulletSpeedSlowbtn";
-            this.bulletSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
-            this.bulletSpeedSlowbtn.TabIndex = 19;
-            this.bulletSpeedSlowbtn.Text = "Slow";
-            this.bulletSpeedSlowbtn.UseVisualStyleBackColor = true;
-            this.bulletSpeedSlowbtn.Click += new System.EventHandler(this.bulletSpeedSlowbtn_Click);
-            // 
-            // bulletSpeedFastbtn
-            // 
-            this.bulletSpeedFastbtn.Location = new System.Drawing.Point(126, 56);
-            this.bulletSpeedFastbtn.Name = "bulletSpeedFastbtn";
-            this.bulletSpeedFastbtn.Size = new System.Drawing.Size(75, 23);
-            this.bulletSpeedFastbtn.TabIndex = 18;
-            this.bulletSpeedFastbtn.Text = "Fast";
-            this.bulletSpeedFastbtn.UseVisualStyleBackColor = true;
-            this.bulletSpeedFastbtn.Click += new System.EventHandler(this.bulletSpeedFastbtn_Click);
+            this.userMsglbl.AutoSize = true;
+            this.userMsglbl.Location = new System.Drawing.Point(332, 379);
+            this.userMsglbl.Name = "userMsglbl";
+            this.userMsglbl.Size = new System.Drawing.Size(0, 13);
+            this.userMsglbl.TabIndex = 22;
             // 
             // signInbtn
             // 
@@ -396,16 +366,18 @@ namespace SpaceInvaders
             this.signInbtn.Name = "signInbtn";
             this.signInbtn.Size = new System.Drawing.Size(123, 23);
             this.signInbtn.TabIndex = 16;
+            this.signInbtn.TabStop = false;
             this.signInbtn.Text = "Sign In";
             this.signInbtn.UseVisualStyleBackColor = true;
             this.signInbtn.Click += new System.EventHandler(this.signInbtn_Click);
             // 
-            // signIntxtBox
+            // signInTextBox
             // 
-            this.signIntxtBox.Location = new System.Drawing.Point(203, 363);
-            this.signIntxtBox.Name = "signIntxtBox";
-            this.signIntxtBox.Size = new System.Drawing.Size(123, 20);
-            this.signIntxtBox.TabIndex = 15;
+            this.signInTextBox.Location = new System.Drawing.Point(203, 363);
+            this.signInTextBox.Name = "signInTextBox";
+            this.signInTextBox.Size = new System.Drawing.Size(123, 20);
+            this.signInTextBox.TabIndex = 15;
+            this.signInTextBox.TabStop = false;
             // 
             // signInlbl
             // 
@@ -422,6 +394,7 @@ namespace SpaceInvaders
             this.saveUserbtn.Name = "saveUserbtn";
             this.saveUserbtn.Size = new System.Drawing.Size(138, 23);
             this.saveUserbtn.TabIndex = 13;
+            this.saveUserbtn.TabStop = false;
             this.saveUserbtn.Text = "Save";
             this.saveUserbtn.UseVisualStyleBackColor = true;
             this.saveUserbtn.Click += new System.EventHandler(this.saveUserbtn_Click);
@@ -432,6 +405,7 @@ namespace SpaceInvaders
             this.saveChangesbtn.Name = "saveChangesbtn";
             this.saveChangesbtn.Size = new System.Drawing.Size(311, 86);
             this.saveChangesbtn.TabIndex = 21;
+            this.saveChangesbtn.TabStop = false;
             this.saveChangesbtn.Text = "Save All Changes";
             this.saveChangesbtn.UseVisualStyleBackColor = true;
             this.saveChangesbtn.Click += new System.EventHandler(this.saveChangesbtn_Click);
@@ -442,6 +416,7 @@ namespace SpaceInvaders
             this.userTextbox.Name = "userTextbox";
             this.userTextbox.Size = new System.Drawing.Size(138, 20);
             this.userTextbox.TabIndex = 12;
+            this.userTextbox.TabStop = false;
             // 
             // makeUserlbl
             // 
@@ -454,20 +429,23 @@ namespace SpaceInvaders
             // 
             // controlArrowsbtn
             // 
+            this.controlArrowsbtn.BackColor = System.Drawing.SystemColors.Highlight;
             this.controlArrowsbtn.Location = new System.Drawing.Point(15, 169);
             this.controlArrowsbtn.Name = "controlArrowsbtn";
-            this.controlArrowsbtn.Size = new System.Drawing.Size(316, 23);
+            this.controlArrowsbtn.Size = new System.Drawing.Size(311, 23);
             this.controlArrowsbtn.TabIndex = 10;
+            this.controlArrowsbtn.TabStop = false;
             this.controlArrowsbtn.Text = "left arrow, right arrow, spacebar";
-            this.controlArrowsbtn.UseVisualStyleBackColor = true;
+            this.controlArrowsbtn.UseVisualStyleBackColor = false;
             this.controlArrowsbtn.Click += new System.EventHandler(this.controlArrowsbtn_Click);
             // 
             // controlKeysbtn
             // 
-            this.controlKeysbtn.Location = new System.Drawing.Point(10, 198);
+            this.controlKeysbtn.Location = new System.Drawing.Point(15, 198);
             this.controlKeysbtn.Name = "controlKeysbtn";
-            this.controlKeysbtn.Size = new System.Drawing.Size(316, 23);
+            this.controlKeysbtn.Size = new System.Drawing.Size(311, 23);
             this.controlKeysbtn.TabIndex = 9;
+            this.controlKeysbtn.TabStop = false;
             this.controlKeysbtn.Text = "\'a\', \'s\', \'w\'";
             this.controlKeysbtn.UseVisualStyleBackColor = true;
             this.controlKeysbtn.Click += new System.EventHandler(this.controlKeysbtn_Click);
@@ -478,18 +456,56 @@ namespace SpaceInvaders
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(75, 313);
             this.exitBtn.TabIndex = 8;
+            this.exitBtn.TabStop = false;
             this.exitBtn.Text = "Continue";
             this.exitBtn.UseVisualStyleBackColor = true;
             this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
             // 
+            // bulletSpeedMidbtn
+            // 
+            this.bulletSpeedMidbtn.BackColor = System.Drawing.SystemColors.Control;
+            this.bulletSpeedMidbtn.Location = new System.Drawing.Point(126, 85);
+            this.bulletSpeedMidbtn.Name = "bulletSpeedMidbtn";
+            this.bulletSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
+            this.bulletSpeedMidbtn.TabIndex = 20;
+            this.bulletSpeedMidbtn.TabStop = false;
+            this.bulletSpeedMidbtn.Text = "Medium";
+            this.bulletSpeedMidbtn.UseVisualStyleBackColor = false;
+            this.bulletSpeedMidbtn.Click += new System.EventHandler(this.bulletSpeedMidbtn_Click);
+            // 
+            // bulletSpeedSlowbtn
+            // 
+            this.bulletSpeedSlowbtn.BackColor = System.Drawing.SystemColors.Highlight;
+            this.bulletSpeedSlowbtn.Location = new System.Drawing.Point(126, 114);
+            this.bulletSpeedSlowbtn.Name = "bulletSpeedSlowbtn";
+            this.bulletSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
+            this.bulletSpeedSlowbtn.TabIndex = 19;
+            this.bulletSpeedSlowbtn.TabStop = false;
+            this.bulletSpeedSlowbtn.Text = "Slow";
+            this.bulletSpeedSlowbtn.UseVisualStyleBackColor = false;
+            this.bulletSpeedSlowbtn.Click += new System.EventHandler(this.bulletSpeedSlowbtn_Click);
+            // 
+            // bulletSpeedFastbtn
+            // 
+            this.bulletSpeedFastbtn.Location = new System.Drawing.Point(126, 56);
+            this.bulletSpeedFastbtn.Name = "bulletSpeedFastbtn";
+            this.bulletSpeedFastbtn.Size = new System.Drawing.Size(75, 23);
+            this.bulletSpeedFastbtn.TabIndex = 18;
+            this.bulletSpeedFastbtn.TabStop = false;
+            this.bulletSpeedFastbtn.Text = "Fast";
+            this.bulletSpeedFastbtn.UseVisualStyleBackColor = true;
+            this.bulletSpeedFastbtn.Click += new System.EventHandler(this.bulletSpeedFastbtn_Click);
+            // 
             // enemyBombSlowbtn
             // 
+            this.enemyBombSlowbtn.BackColor = System.Drawing.SystemColors.Highlight;
             this.enemyBombSlowbtn.Location = new System.Drawing.Point(228, 114);
             this.enemyBombSlowbtn.Name = "enemyBombSlowbtn";
             this.enemyBombSlowbtn.Size = new System.Drawing.Size(75, 23);
             this.enemyBombSlowbtn.TabIndex = 6;
+            this.enemyBombSlowbtn.TabStop = false;
             this.enemyBombSlowbtn.Text = "Slow";
-            this.enemyBombSlowbtn.UseVisualStyleBackColor = true;
+            this.enemyBombSlowbtn.UseVisualStyleBackColor = false;
             this.enemyBombSlowbtn.Click += new System.EventHandler(this.enemyBombSlowbtn_Click);
             // 
             // enemyBombFastbtn
@@ -498,18 +514,21 @@ namespace SpaceInvaders
             this.enemyBombFastbtn.Name = "enemyBombFastbtn";
             this.enemyBombFastbtn.Size = new System.Drawing.Size(75, 23);
             this.enemyBombFastbtn.TabIndex = 5;
+            this.enemyBombFastbtn.TabStop = false;
             this.enemyBombFastbtn.Text = "Fast";
             this.enemyBombFastbtn.UseVisualStyleBackColor = true;
             this.enemyBombFastbtn.Click += new System.EventHandler(this.enemyBombFastbtn_Click);
             // 
             // playerSpeedMidbtn
             // 
+            this.playerSpeedMidbtn.BackColor = System.Drawing.SystemColors.Highlight;
             this.playerSpeedMidbtn.Location = new System.Drawing.Point(15, 85);
             this.playerSpeedMidbtn.Name = "playerSpeedMidbtn";
             this.playerSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
             this.playerSpeedMidbtn.TabIndex = 4;
+            this.playerSpeedMidbtn.TabStop = false;
             this.playerSpeedMidbtn.Text = "Medium";
-            this.playerSpeedMidbtn.UseVisualStyleBackColor = true;
+            this.playerSpeedMidbtn.UseVisualStyleBackColor = false;
             this.playerSpeedMidbtn.Click += new System.EventHandler(this.playerSpeedMidbtn_Click);
             // 
             // playerSpeedSlowbtn
@@ -518,6 +537,7 @@ namespace SpaceInvaders
             this.playerSpeedSlowbtn.Name = "playerSpeedSlowbtn";
             this.playerSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
             this.playerSpeedSlowbtn.TabIndex = 3;
+            this.playerSpeedSlowbtn.TabStop = false;
             this.playerSpeedSlowbtn.Text = "Slow";
             this.playerSpeedSlowbtn.UseVisualStyleBackColor = true;
             this.playerSpeedSlowbtn.Click += new System.EventHandler(this.playerSpeedSlowbtn_Click);
@@ -528,6 +548,7 @@ namespace SpaceInvaders
             this.playerSpeedFastbtn.Name = "playerSpeedFastbtn";
             this.playerSpeedFastbtn.Size = new System.Drawing.Size(75, 23);
             this.playerSpeedFastbtn.TabIndex = 2;
+            this.playerSpeedFastbtn.TabStop = false;
             this.playerSpeedFastbtn.Text = "Fast";
             this.playerSpeedFastbtn.UseVisualStyleBackColor = true;
             this.playerSpeedFastbtn.Click += new System.EventHandler(this.playerSpeedFastbtn_Click);
@@ -575,8 +596,12 @@ namespace SpaceInvaders
             this.ClientSize = new System.Drawing.Size(672, 622);
             this.Controls.Add(this.menuPnl);
             this.Controls.Add(this.menuBtn);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.KeyPreview = true;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(688, 682);
             this.Menu = this.mainMenu1;
+            this.MinimumSize = new System.Drawing.Size(688, 682);
             this.Name = "Form1";
             this.Text = "Space Invaders Game";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -602,7 +627,7 @@ namespace SpaceInvaders
 
 		private void HandleKeys()
 		{
-            if (!useArrows)
+            if (useArrows)
             {
                 switch (CurrentKeyDown)
                 {
@@ -631,7 +656,7 @@ namespace SpaceInvaders
                         break;
                 }
             }
-            else
+            else if (!useArrows)
             {
                 switch (CurrentKeyDown)
                 {
@@ -650,7 +675,7 @@ namespace SpaceInvaders
                         if (timer1.Enabled == false)
                             timer1.Start();
                         break;
-                    case "S":
+                    case "D":
                         TheMan.MoveRight(ClientRectangle.Right);
                         Invalidate(TheMan.GetBounds());
                         if (timer1.Enabled == false)
@@ -895,7 +920,7 @@ namespace SpaceInvaders
 		{
 			if (TheMan.Died)
 			{
-			    NumberOfMen --;
+			    NumberOfMen--;
                 menuItem5.Text = "Lives = " + NumberOfMen;
                 if (NumberOfMen == 0)
 				{
@@ -943,7 +968,6 @@ namespace SpaceInvaders
 			}
 		}
 
-
 		private int nTotalInvaders = 0;
 		private void timer1_Tick(object sender, System.EventArgs e)
 		{
@@ -953,12 +977,11 @@ namespace SpaceInvaders
 
 			if (GameGoing == false)
 			{
-				if (TimerCounter % 6 == 0)
+				if (TimerCounter % TheSpeed == 0)
 					MoveInvadersInPlace();
 				Invalidate();
 				return;
 			}
-
 
 			if (TheBullet.Position.Y < 0)
 			{
@@ -1014,11 +1037,12 @@ namespace SpaceInvaders
 
 				if (nTotalInvaders == 0)
 				{
-					InitializeAllGameObjects(false); // don't initialize score					
-					if (++TheLevel % 5 == 0)
-					{
-						NumberOfMen++;
-					}
+				    InitializeAllGameObjects(false); // don't initialize score
+                    if (++TheLevel % 5 == 0)
+                    {
+                        NumberOfMen++;
+                    }
+                    LoadSettings(currentSettings, sender, e);
 				}
 			}
 
@@ -1038,8 +1062,8 @@ namespace SpaceInvaders
 
 		private void Form1_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
 		{
-//			string result = e.KeyChar.ToString();
-//			Invalidate(TheMan.GetBounds());
+			//string result = e.KeyChar.ToString();
+			//Invalidate(TheMan.GetBounds());
 		}
 
 		private void Form1_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
@@ -1051,22 +1075,22 @@ namespace SpaceInvaders
 			}
 		}
 
-        //restarts
+        //restarts game
 		private void menuItem2_Click(object sender, System.EventArgs e)
 		{
 			this.InitializeAllGameObjects(true);
 			TheLevel = 0;
 		}
 
-        //pause and unpause
+        //pause and unpause game
         private void menuItem4_Click(object sender, EventArgs e)
         {
-            if (GameGoing == false && kNumberOfTries > 0)
+            if (GameGoing == false && NumberOfMen > 0)
             {
                 GameGoing = true;
                 timer1.Enabled = true;
             }
-            else if (GameGoing == true && kNumberOfTries > 0)
+            else if (GameGoing == true && NumberOfMen > 0)
             {
                 GameGoing = false;
                 timer1.Enabled = false;
@@ -1090,88 +1114,220 @@ namespace SpaceInvaders
         //close the menu
         private void exitBtn_Click(object sender, EventArgs e)
         {
-            if (NumberOfMen > 0)
+            if(currentSettings.Name == "")
+            {
+                string message = "You need to sign in, or make an account!";
+                string title = "ImpoRTANT";
+                MessageBox.Show(message, title);
+            }
+            else
             {
                 menuPnl.Visible = false;
                 menuBtn.Visible = true;
                 GameGoing = true;
                 timer1.Enabled = true;
             }
-            else
-            {
-                menuItem2_Click(sender, e);
-            }
         }
 
         //save a new user profile
         private void saveUserbtn_Click(object sender, EventArgs e)
         {
-            currentSettings.Name = userTextbox.Text;
-            this.saveChangesbtn_Click(sender, e);
+            if (userTextbox.Text != "")
+            {
+                //makes sure there isnt an existing profile with the same name
+                foreach (UserAttributes currUser in savedProfiles)
+                {
+                    if (currUser.Name == userTextbox.Text)
+                    {
+                        currentSettings = currUser;
+                        LoadSettings(currentSettings, sender, e);
+                        userMsglbl.Text = "Loaded profile: \n" + currentSettings.Name;
+                        userTextbox.Text = "";
+                        return;
+                    }
+                }
+                savedProfiles.Add(currentSettings);
+                currentSettings.Name = userTextbox.Text;
+                this.saveChangesbtn_Click(sender, e);
+                userTextbox.Text = "";
+            }
         }
 
-        //save the current set of options to the current profile (not saved to file)
+        //save the current set of options to the current profile, and saves to their profile
         private void saveChangesbtn_Click(object sender, EventArgs e)
         {
             currentSettings.BombSpeed = TheBomb.TheBombInterval;
             currentSettings.BulletSpeed = TheBullet.BulletInterval;
-            currentSettings.MovementSpeed = player.Interval;
+            currentSettings.MovementSpeed = TheMan.Interval;
             currentSettings.UseArrows = useArrows;
+            
+            using (StreamWriter writer = new StreamWriter("userprofiles.xml"))
+            {
+                serializer.Serialize(writer, savedProfiles);
+            }
+
+            userMsglbl.Text = "Made new profile: \n" + currentSettings.Name;
         }
 
+        //looks for a profile with the name that's input, and will load settings if find that profile
         private void signInbtn_Click(object sender, EventArgs e)
         {
-            
+            if (signInTextBox.Text != "")
+            {
+                using (StreamReader reader = new StreamReader("userprofiles.xml"))
+                {
+                    savedProfiles = serializer.Deserialize(reader) as List<UserAttributes>;
+                }
+
+                foreach (UserAttributes currUser in savedProfiles)
+                {
+                    if (currUser.Name == signInTextBox.Text)
+                    {
+                        currentSettings = currUser;
+                        LoadSettings(currentSettings, sender, e);
+                        userMsglbl.Text = "Loaded profile: \n" + currentSettings.Name;
+                        signInTextBox.Text = "";
+                        return;
+                    }
+                }
+
+                userMsglbl.Text = "User not found.";
+            }
         }
 
-        private void bulletSpeedSlowbtn_Click(object sender, EventArgs e)
+        //applies the settings from a saved profile that signs in
+        private void LoadSettings(UserAttributes applySettings, object senderPass, EventArgs ePass)
         {
-            TheBullet.BulletInterval = 10;
-        }
+            switch (applySettings.BulletSpeed)
+            {
+                case 30:
+                    bulletSpeedFastbtn_Click(senderPass, ePass);
+                    break;
+                case 20:
+                    bulletSpeedMidbtn_Click(senderPass, ePass);
+                    break;
+                case 10:
+                    bulletSpeedSlowbtn_Click(senderPass, ePass);
+                    break;
+            }
 
-        private void bulletSpeedMidbtn_Click(object sender, EventArgs e)
-        {
-            TheBullet.BulletInterval = 20;
+            switch (applySettings.BombSpeed)
+            {
+                case 15:
+                    enemyBombFastbtn_Click(senderPass, ePass);
+                    break;
+                case 5:
+                    enemyBombSlowbtn_Click(senderPass, ePass);
+                    break;
+            }
+
+            switch (applySettings.MovementSpeed)
+            {
+                case 15:
+                    playerSpeedFastbtn_Click(senderPass, ePass);
+                    break;
+                case 10:
+                    playerSpeedMidbtn_Click(senderPass, ePass);
+                    break;
+                case 5:
+                    playerSpeedSlowbtn_Click(senderPass, ePass);
+                    break;
+            }
+
+            if (applySettings.UseArrows)
+            {
+                controlArrowsbtn_Click(senderPass, ePass);
+            }
+            else
+            {
+                controlKeysbtn_Click(senderPass, ePass);
+            }
         }
 
         private void bulletSpeedFastbtn_Click(object sender, EventArgs e)
         {
             TheBullet.BulletInterval = 30;
+            currentSettings.BulletSpeed = 30;
+            bulletSpeedFastbtn.BackColor = SystemColors.Highlight;
+            bulletSpeedMidbtn.BackColor = SystemColors.Control;
+            bulletSpeedSlowbtn.BackColor = SystemColors.Control;
+        }
+
+        private void bulletSpeedMidbtn_Click(object sender, EventArgs e)
+        {
+            TheBullet.BulletInterval = 20;
+            currentSettings.BulletSpeed = 20;
+            bulletSpeedFastbtn.BackColor = SystemColors.Control;
+            bulletSpeedMidbtn.BackColor = SystemColors.Highlight;
+            bulletSpeedSlowbtn.BackColor = SystemColors.Control;
+        }
+
+        private void bulletSpeedSlowbtn_Click(object sender, EventArgs e)
+        {
+            TheBullet.BulletInterval = 10;
+            currentSettings.BulletSpeed = 10;
+            bulletSpeedFastbtn.BackColor = SystemColors.Control;
+            bulletSpeedMidbtn.BackColor = SystemColors.Control;
+            bulletSpeedSlowbtn.BackColor = SystemColors.Highlight;
         }
 
         private void playerSpeedFastbtn_Click(object sender, EventArgs e)
         {
-            player.Interval = 15;
+            TheMan.Interval = 15;
+            currentSettings.MovementSpeed = 15;
+            playerSpeedFastbtn.BackColor = SystemColors.Highlight;
+            playerSpeedMidbtn.BackColor = SystemColors.Control;
+            playerSpeedSlowbtn.BackColor = SystemColors.Control;
         }
 
         private void playerSpeedMidbtn_Click(object sender, EventArgs e)
         {
-            player.Interval = 10;
+            TheMan.Interval = 10;
+            currentSettings.MovementSpeed = 10;
+            playerSpeedFastbtn.BackColor = SystemColors.Control;
+            playerSpeedMidbtn.BackColor = SystemColors.Highlight;
+            playerSpeedSlowbtn.BackColor = SystemColors.Control;
         }
 
         private void playerSpeedSlowbtn_Click(object sender, EventArgs e)
         {
-            player.Interval = 5;
-        }
-
-        private void enemyBombSlowbtn_Click(object sender, EventArgs e)
-        {
-            TheBomb.TheBombInterval = 5;
+            TheMan.Interval = 5;
+            currentSettings.MovementSpeed = 5;
+            playerSpeedFastbtn.BackColor = SystemColors.Control;
+            playerSpeedMidbtn.BackColor = SystemColors.Control;
+            playerSpeedSlowbtn.BackColor = SystemColors.Highlight;
         }
 
         private void enemyBombFastbtn_Click(object sender, EventArgs e)
         {
             TheBomb.TheBombInterval = 15;
+            currentSettings.BombSpeed = 15;
+            enemyBombFastbtn.BackColor = SystemColors.Highlight;
+            enemyBombSlowbtn.BackColor = SystemColors.Control;
+        }
+
+        private void enemyBombSlowbtn_Click(object sender, EventArgs e)
+        {
+            TheBomb.TheBombInterval = 5;
+            currentSettings.BombSpeed = 5;
+            enemyBombFastbtn.BackColor = SystemColors.Control;
+            enemyBombSlowbtn.BackColor = SystemColors.Highlight;
         }
 
         private void controlArrowsbtn_Click(object sender, EventArgs e)
         {
-            useArrows = false;
+            useArrows = true;
+            currentSettings.UseArrows = true;
+            controlArrowsbtn.BackColor = SystemColors.Highlight;
+            controlKeysbtn.BackColor = SystemColors.Control;
         }
 
         private void controlKeysbtn_Click(object sender, EventArgs e)
         {
-            useArrows = true;
+            useArrows = false;
+            currentSettings.UseArrows = false;
+            controlArrowsbtn.BackColor = SystemColors.Control;
+            controlKeysbtn.BackColor = SystemColors.Highlight;
         }
     }
 }

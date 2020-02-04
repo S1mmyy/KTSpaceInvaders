@@ -30,15 +30,12 @@ namespace SpaceInvaders
             makeList(theScore);
             string temp = "";
 
-            if(topScores.Count < 5)
-            {
-                go = true;
-            }
-            else
+            if(topScores.Count > 5)
             {
                 temp = topScores[topScores.Count - 1] + "";
                 topScores.RemoveAt(topScores.Count - 1);
                 delete(temp);
+                go = true;
             }
 
             if (go)
@@ -54,6 +51,7 @@ namespace SpaceInvaders
         private void delete(string remove)
         {
             string tempFile = "tempFile.txt";
+            string num = "";
             bool once = true;
 
             using(var sr = new StreamReader("highscore.txt"))
@@ -61,14 +59,27 @@ namespace SpaceInvaders
             {
                 string line;
 
-                while((line = sr.ReadLine()) != null)
+                while ((line = sr.ReadLine()) != null)
                 {
-                     if(once && line.Substring(0, remove.Length).Equals(remove)){
+
+                    for (int i = 0; i < line.Length; i++)
+                    {
+                        if (line[i] == ' ')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            num += line[i];
+                        }
+                    }
+
+                    if (once && num.Equals(remove)){
                         once = false;
                     }else{
                         sw.WriteLine(line);
                     }
-                         
+                    num = "";
                 }
             }
 
@@ -91,7 +102,7 @@ namespace SpaceInvaders
         private void makeList(int num)
         {
             topScores.Add(num);
-            makeList();
+            sortList(topScores.Count);
         }
 
         private void makeList()
@@ -116,15 +127,10 @@ namespace SpaceInvaders
                             num += line[i];
                         }
                     }
+                    
+                    topScores.Add(Convert.ToInt32(num));
+                    sortList(topScores.Count);
 
-                    if (topScores.Count == 0)
-                    {
-                        topScores.Add(Convert.ToInt32(num));
-                    }
-                    else
-                    {
-                        sortList(topScores.Count);
-                    }
                     line = reader.ReadLine();
                     num = "";
                 }
