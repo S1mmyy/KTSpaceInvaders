@@ -5,82 +5,109 @@ using System.Collections.Generic;
 
 namespace SpaceInvaders
 {
-	/// <summary>
-	/// Summary description for HighScore.
-	/// </summary>
-	public class HighScore : Score
-	{
+    /// <summary>
+    /// Summary description for HighScore.
+    /// </summary>
+    public class HighScore : Score
+    {
         private UserAttributes person;
         private List<int> topScores;
-		public HighScore(int x, int y) : base(x, y)
-		{
-            //
-            // TODO: Add constructor logic here
-            //
-            person = new UserAttributes();
+        public HighScore(int x, int y, UserAttributes user) : base(x, y)
+        {
+            person = user;
             topScores = new List<int>();
         }
 
-		public override void Draw(Graphics g)
-		{
-		    g.DrawString("High Score: " + Count.ToString(), MyFont, Brushes.RoyalBlue, Position.X, Position.Y, new StringFormat());
-		}
+        public override void Draw(Graphics g)
+        {
+            g.DrawString("High Score: " + Count.ToString(), MyFont, Brushes.RoyalBlue, Position.X, Position.Y, new StringFormat());
+        }
 
-		public void Write(int theScore)
-		{
-            DateTime value = DateTime.Today;
+        public void Write(int theScore)
+        {
+            DateTime value = DateTime.Now;
             bool go = false;
-            Read();
-            for(int i = 0; i < topScores.Count; i++)
+            makeList(theScore);
+            string temp = "";
+
+            if(topScores.Count < 5)
             {
-                if (topScores[i] < theScore)
-                {
-                    go = true;
-                    break;
-                }
+                go = true;
             }
-            if (topScores.Count > 5)
+            else
             {
-                topScores.RemoveAt(0);
+                temp = topScores[topScores.Count - 1] + "";
+                topScores.RemoveAt(topScores.Count - 1);
+                delete(temp);
             }
+
             if (go)
-			{
-				Count = theScore;
+            {
+                Count = theScore;
                 using (StreamWriter sw = new StreamWriter("highscore.txt", true))
                 {
                     sw.WriteLine(Count.ToString() + " " + person.Name + " " + value);
                     sw.Close();
                 }
-			}
-            
-            
+            }
+        }
+        private void delete(string remove)
+        {
+            string tempFile = "tempFile.txt";
+            bool once = true;
+
+            using(var sr = new StreamReader("highscore.txt"))
+            using(var sw = new StreamWriter(tempFile))
+            {
+                string line;
+
+                while((line = sr.ReadLine()) != null)
+                {
+                     if(once && line.Substring(0, remove.Length).Equals(remove)){
+                        once = false;
+                    }else{
+                        sw.WriteLine(line);
+                    }
+                         
+                }
+            }
+
+            File.Delete("highscore.txt");
+            File.Move(tempFile, "highscore.txt");
         }
 
-		public void Read()
-		{
-		    if (File.Exists("highscore.txt"))
-		    {
-			    StreamReader sr = new StreamReader("highscore.txt");
-			    string score = sr.ReadLine();
-			    Count = Convert.ToInt32(score);
-			    sr.Close();
+        public void Read()
+        {
+            if (File.Exists("highscore.txt"))
+            {
                 makeList();
-            }        
+                StreamReader sr = new StreamReader("highscore.txt");
+                string score = sr.ReadLine();
+                Count = Convert.ToInt32(topScores[0]);
+                sr.Close();
+            }
+        }
+
+        private void makeList(int num)
+        {
+            topScores.Add(num);
+            makeList();
         }
 
         private void makeList()
         {
-            using(StreamReader reader = new StreamReader("highscore.txt")){
+            using (StreamReader reader = new StreamReader("highscore.txt"))
+            {
                 string line = reader.ReadLine();
                 string num = "";
                 int i = 0;
 
                 while (line != null)
                 {
-                    
-                    for(i = 0; i < line.Length; i++)
+
+                    for (i = 0; i < line.Length; i++)
                     {
-                        if(line[i] == ' ')
+                        if (line[i] == ' ')
                         {
                             break;
                         }
@@ -89,30 +116,38 @@ namespace SpaceInvaders
                             num += line[i];
                         }
                     }
-                    if(topScores.Count == 0)
+
+                    if (topScores.Count == 0)
                     {
                         topScores.Add(Convert.ToInt32(num));
                     }
                     else
                     {
-                        for (i = 0; i < topScores.Count; i++)
-                        {
-                            if(topScores[i] > Convert.ToInt32(num))
-                            {
-                                topScores.Insert(i, Convert.ToInt32(num));
-                            }
-                        }
-                        if (topScores[i-1] < Convert.ToInt32(num))
-                        {
-                            topScores.Add(Convert.ToInt32(num));
-                        }
+                        sortList(topScores.Count);
                     }
                     line = reader.ReadLine();
                     num = "";
-                    //topScores.Add();
                 }
                 reader.Close();
             }
         }
-	}
+
+        private void sortList(int x)
+        {
+            int temp = 0;
+            for(int i = 0; i < x; i++)
+            {
+                for(int j = 0; j < x; j++)
+                {
+                    if (topScores[i] > topScores[j])
+                    {
+                        temp = topScores[i];
+                        topScores[i] = topScores[j];
+                        topScores[j] = temp;
+                    }
+                }
+                
+            }
+        }
+    }
 }
