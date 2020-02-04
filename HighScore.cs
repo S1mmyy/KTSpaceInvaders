@@ -12,9 +12,10 @@ namespace SpaceInvaders
     {
         private UserAttributes person;
         private List<int> topScores;
-        public HighScore(int x, int y) : base(x, y)
+
+        public HighScore(int x, int y, UserAttributes user) : base(x, y)
         {
-            person = new UserAttributes();
+            person = user;
             topScores = new List<int>();
         }
 
@@ -25,21 +26,20 @@ namespace SpaceInvaders
 
         public void Write(int theScore)
         {
-            DateTime value = DateTime.Today;
+            DateTime value = DateTime.Now;
             bool go = false;
-            Read();
-            for (int i = 0; i < topScores.Count; i++)
-            {
-                if (topScores[i] < theScore)
-                {
-                    go = true;
-                    break;
-                }
-            }
+            MakeList(theScore);
+            string temp = "";
 
-            if (topScores.Count > 5)
+            if (topScores.Count < 5)
             {
-                topScores.RemoveAt(0);
+                go = true;
+            }
+            else
+            {
+                temp = topScores[topScores.Count - 1] + "";
+                topScores.RemoveAt(topScores.Count - 1);
+                Delete(temp);
             }
 
             if (go)
@@ -53,19 +53,53 @@ namespace SpaceInvaders
             }
         }
 
+        private void Delete(string remove)
+        {
+            string tempFile = "tempFile.txt";
+            bool once = true;
+
+            using (var sr = new StreamReader("highscore.txt"))
+            using (var sw = new StreamWriter(tempFile))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (once && line.Substring(0, remove.Length).Equals(remove))
+                    {
+                        once = false;
+                    }
+                    else
+                    {
+                        sw.WriteLine(line);
+                    }
+
+                }
+            }
+
+            File.Delete("highscore.txt");
+            File.Move(tempFile, "highscore.txt");
+        }
+
         public void Read()
         {
             if (File.Exists("highscore.txt"))
             {
+                MakeList();
                 StreamReader sr = new StreamReader("highscore.txt");
                 string score = sr.ReadLine();
-                Count = Convert.ToInt32(score);
+                Count = Convert.ToInt32(topScores[0]);
                 sr.Close();
-                makeList();
             }
         }
 
-        private void makeList()
+        private void MakeList(int num)
+        {
+            topScores.Add(num);
+            MakeList();
+        }
+
+        private void MakeList()
         {
             using (StreamReader reader = new StreamReader("highscore.txt"))
             {
@@ -94,23 +128,29 @@ namespace SpaceInvaders
                     }
                     else
                     {
-                        for (i = 0; i < topScores.Count; i++)
-                        {
-                            if (topScores[i] > Convert.ToInt32(num))
-                            {
-                                topScores.Insert(i, Convert.ToInt32(num));
-                            }
-                        }
-                        if (topScores[i - 1] < Convert.ToInt32(num))
-                        {
-                            topScores.Add(Convert.ToInt32(num));
-                        }
+                        SortList(topScores.Count);
                     }
                     line = reader.ReadLine();
                     num = "";
-                    //topScores.Add();
                 }
                 reader.Close();
+            }
+        }
+
+        private void SortList(int x)
+        {
+            int temp = 0;
+            for (int i = 0; i < x; i++)
+            {
+                for (int j = 0; j < x; j++)
+                {
+                    if (topScores[i] > topScores[j])
+                    {
+                        temp = topScores[i];
+                        topScores[i] = topScores[j];
+                        topScores[j] = temp;
+                    }
+                }
             }
         }
     }

@@ -157,7 +157,7 @@ namespace SpaceInvaders
 		private void InitializeScore()
 		{
 			TheScore = new Score(ClientRectangle.Right - 400, 50);
-			TheHighScore = new HighScore(ClientRectangle.Left + 25, 50);
+			TheHighScore = new HighScore(ClientRectangle.Left + 25, 50, currentSettings);
 			TheHighScore.Read();
 		}
 
