@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SpaceInvaders
 {
-    class UserAttributes
+    public class UserAttributes
     {
         public string Name { get; set; }
         public int BulletSpeed { get; set; }
