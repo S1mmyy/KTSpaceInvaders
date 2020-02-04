@@ -463,7 +463,7 @@ namespace SpaceInvaders
             // 
             // bulletSpeedMidbtn
             // 
-            this.bulletSpeedMidbtn.BackColor = System.Drawing.SystemColors.Control;
+            this.bulletSpeedMidbtn.BackColor = System.Drawing.SystemColors.Highlight;
             this.bulletSpeedMidbtn.Location = new System.Drawing.Point(126, 85);
             this.bulletSpeedMidbtn.Name = "bulletSpeedMidbtn";
             this.bulletSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
@@ -475,7 +475,7 @@ namespace SpaceInvaders
             // 
             // bulletSpeedSlowbtn
             // 
-            this.bulletSpeedSlowbtn.BackColor = System.Drawing.SystemColors.Highlight;
+            this.bulletSpeedSlowbtn.BackColor = System.Drawing.SystemColors.Control;
             this.bulletSpeedSlowbtn.Location = new System.Drawing.Point(126, 114);
             this.bulletSpeedSlowbtn.Name = "bulletSpeedSlowbtn";
             this.bulletSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
@@ -521,7 +521,7 @@ namespace SpaceInvaders
             // 
             // playerSpeedMidbtn
             // 
-            this.playerSpeedMidbtn.BackColor = System.Drawing.SystemColors.Highlight;
+            this.playerSpeedMidbtn.BackColor = System.Drawing.SystemColors.Control;
             this.playerSpeedMidbtn.Location = new System.Drawing.Point(15, 85);
             this.playerSpeedMidbtn.Name = "playerSpeedMidbtn";
             this.playerSpeedMidbtn.Size = new System.Drawing.Size(75, 23);
@@ -533,13 +533,14 @@ namespace SpaceInvaders
             // 
             // playerSpeedSlowbtn
             // 
+            this.playerSpeedSlowbtn.BackColor = System.Drawing.SystemColors.Highlight;
             this.playerSpeedSlowbtn.Location = new System.Drawing.Point(15, 114);
             this.playerSpeedSlowbtn.Name = "playerSpeedSlowbtn";
             this.playerSpeedSlowbtn.Size = new System.Drawing.Size(75, 23);
             this.playerSpeedSlowbtn.TabIndex = 3;
             this.playerSpeedSlowbtn.TabStop = false;
             this.playerSpeedSlowbtn.Text = "Slow";
-            this.playerSpeedSlowbtn.UseVisualStyleBackColor = true;
+            this.playerSpeedSlowbtn.UseVisualStyleBackColor = false;
             this.playerSpeedSlowbtn.Click += new System.EventHandler(this.playerSpeedSlowbtn_Click);
             // 
             // playerSpeedFastbtn
@@ -927,6 +928,8 @@ namespace SpaceInvaders
 					TheHighScore.Write(TheScore.Count);
 					TheScore.GameOver = true;
 					GameGoing = false;
+                    timer1.Enabled = false;
+                    menuPnl.Visible = true;
 				}
 				else
 				{
@@ -971,88 +974,91 @@ namespace SpaceInvaders
 		private int nTotalInvaders = 0;
 		private void timer1_Tick(object sender, System.EventArgs e)
 		{
-			HandleKeys();
+            if (NumberOfMen > 0)
+            {
+                HandleKeys();
 
-			TimerCounter++;
+                TimerCounter++;
 
-			if (GameGoing == false)
-			{
-				if (TimerCounter % TheSpeed == 0)
-					MoveInvadersInPlace();
-				Invalidate();
-				return;
-			}
+                if (GameGoing == false)
+                {
+                    if (TimerCounter % TheSpeed == 0)
+                        MoveInvadersInPlace();
+                    Invalidate();
+                    return;
+                }
 
-			if (TheBullet.Position.Y < 0)
-			{
-			    ActiveBullet = false;
-			}
+                if (TheBullet.Position.Y < 0)
+                {
+                    ActiveBullet = false;
+                }
 
-			if (TimerCounter % kSaucerInterval == 0)
-			{
-				InitializeSaucer();
-				PlaySoundInThread("8.wav", 1);
-				SaucerStart = true;
-			}
+                if (TimerCounter % kSaucerInterval == 0)
+                {
+                    InitializeSaucer();
+                    PlaySoundInThread("8.wav", 1);
+                    SaucerStart = true;
+                }
 
-			if (SaucerStart == true)
-			{
-				CurrentSaucer.Move();
-				if (CurrentSaucer.GetBounds().Left > ClientRectangle.Right)
-				{
-				    SaucerStart = false;
-				}
-			}
-            
-			if (TimerCounter % TheSpeed == 0)
-			{ 
-				MoveInvaders();
-
-				nTotalInvaders = TotalNumberOfInvaders();
-
-				if (nTotalInvaders <= 20)
-				{
-					TheSpeed = 5;
-				}
-
-				if (nTotalInvaders <= 10)
-				{
-					TheSpeed = 4;
-				}
-
-				if (nTotalInvaders <= 5)
-				{
-					TheSpeed = 3;
-				}
-
-				if (nTotalInvaders <= 3)
-				{
-					TheSpeed = 2;
-				}
-
-				if (nTotalInvaders <= 1 )
-				{
-					TheSpeed = 1;
-				}
-
-				if (nTotalInvaders == 0)
-				{
-				    InitializeAllGameObjects(false); // don't initialize score
-                    if (++TheLevel % 5 == 0)
+                if (SaucerStart == true)
+                {
+                    CurrentSaucer.Move();
+                    if (CurrentSaucer.GetBounds().Left > ClientRectangle.Right)
                     {
-                        NumberOfMen++;
+                        SaucerStart = false;
                     }
-                    LoadSettings(currentSettings, sender, e);
-				}
-			}
+                }
 
-			TestBulletCollision();
-			TestBombCollision();
+                if (TimerCounter % TheSpeed == 0)
+                {
+                    MoveInvaders();
 
-			Invalidate();
-			// move invaders
+                    nTotalInvaders = TotalNumberOfInvaders();
 
-			// move bullets
+                    if (nTotalInvaders <= 20)
+                    {
+                        TheSpeed = 5;
+                    }
+
+                    if (nTotalInvaders <= 10)
+                    {
+                        TheSpeed = 4;
+                    }
+
+                    if (nTotalInvaders <= 5)
+                    {
+                        TheSpeed = 3;
+                    }
+
+                    if (nTotalInvaders <= 3)
+                    {
+                        TheSpeed = 2;
+                    }
+
+                    if (nTotalInvaders <= 1)
+                    {
+                        TheSpeed = 1;
+                    }
+
+                    if (nTotalInvaders == 0)
+                    {
+                        InitializeAllGameObjects(false); // don't initialize score
+                        if (++TheLevel % 5 == 0)
+                        {
+                            NumberOfMen++;
+                        }
+                        LoadSettings(currentSettings, sender, e);
+                    }
+                }
+
+                TestBulletCollision();
+                TestBombCollision();
+
+                Invalidate();
+                // move invaders
+
+                // move bullets
+            }
 		}
 
         private void Form1_Load(object sender, EventArgs e)
@@ -1080,6 +1086,7 @@ namespace SpaceInvaders
 		{
 			this.InitializeAllGameObjects(true);
 			TheLevel = 0;
+            NumberOfMen = kNumberOfTries;
 		}
 
         //pause and unpause game
